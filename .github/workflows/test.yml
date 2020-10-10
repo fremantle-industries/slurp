@@ -1,0 +1,59 @@
+name: test
+
+on:
+  push:
+    branches:
+      - master
+      - '*'
+  pull_request:
+    branches:
+      - '*'
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    name: Test OTP ${{matrix.otp}} / Elixir ${{matrix.elixir}}
+
+    strategy:
+      matrix:
+        otp: [21.x, 22.x, 23.x]
+        elixir: [1.8.x, 1.9.x, 1.10.x]
+
+    steps:
+      - uses: actions/checkout@v1.0.0
+
+      - uses: actions/setup-elixir@v1.3.0
+        with:
+          otp-version: ${{matrix.otp}}
+          elixir-version: ${{matrix.elixir}}
+
+      - name: Cache Elixir
+        uses: actions/cache@v2.1.3
+        with:
+          path: |
+            deps
+            _build/dev
+            _build/test
+          key: cache-elixir-${{secrets.CACHE_VERSION}}-${{runner.os}}-${{hashFiles('mix.lock')}}-${{github.ref}}
+          restore-keys: |
+            cache-elixir-${{secrets.CACHE_VERSION}}-${{runner.os}}-${{hashFiles('mix.lock')}}-
+            cache-elixir-${{secrets.CACHE_VERSION}}-${{runner.os}}-
+
+      - name: Install Dependencies
+        run: mix deps.get
+
+      - name: Test
+        run: mix test
+
+      - uses: actions/upload-artifact@v2
+        with:
+          name: log artifacts
+          path: |
+            log
+
+      - name: Dialyzer
+        run: mix dialyzer --halt-exit-status
+
+
+
+
