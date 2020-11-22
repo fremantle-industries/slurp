@@ -3,6 +3,7 @@ defmodule Slurp.Application do
 
   def start(_type, _args) do
     children = [
+      Acme.Scheduler,
       Slurp.Blockchains.BlockchainStore,
       Slurp.Blockchains.ConnectionSupervisor,
       # Slurp.NewHeadsProducer,

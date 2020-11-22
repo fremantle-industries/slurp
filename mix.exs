@@ -31,6 +31,7 @@ defmodule Slurp.MixProject do
       {:enumerati, "~> 0.0.8"},
       {:stored, "~> 0.0.7"},
       {:table_rex, "~> 3.0"},
+      {:quantum, "~> 3.0"},
       {:logger_file_backend_with_formatters, "~> 0.0.1", only: [:dev, :test]},
       {:dialyxir, "~> 1.0", only: :dev, runtime: false},
       {:mix_test_watch, "~> 1.0", only: :dev, runtime: false},

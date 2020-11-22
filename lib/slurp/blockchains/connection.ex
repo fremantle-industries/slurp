@@ -1,5 +1,6 @@
 defmodule Slurp.Blockchains.Connection do
   use GenServer
+  require Logger
 
   def start_link(id: id) do
     name = process_name(id)
@@ -11,6 +12,7 @@ defmodule Slurp.Blockchains.Connection do
   end
 
   def init(state) do
+    Logger.info("Started Connection!")
     {:ok, state}
   end
 end

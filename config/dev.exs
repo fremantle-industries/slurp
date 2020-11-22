@@ -31,8 +31,8 @@ config :slurp,
       chain: "ETH",
       testnet: false,
       rpc: [
-        "https://mainnet.infura.io/v3/${INFURA_API_KEY}",
-        "wss://mainnet.infura.io/ws/v3/${INFURA_API_KEY}",
+        # "https://mainnet.infura.io/v3/${INFURA_API_KEY}",
+        # "wss://mainnet.infura.io/ws/v3/${INFURA_API_KEY}",
         "https://api.mycryptoapi.com/eth",
         "https://cloudflare-eth.com"
       ]
