@@ -9,7 +9,7 @@ An EVM block ingestion toolkit for Elixir
 
 ## What Can I Do? TLDR;
 
-Stream events from multiple EVM blockchains with a near-uniform API
+Stream blocks & events from multiple EVM blockchains with a near-uniform API
 
 | Supported Blockchains |
 | --------------------- |
@@ -19,6 +19,8 @@ Stream events from multiple EVM blockchains with a near-uniform API
 | Matic                 |
 | Optimism              |
 | NEAR                  |
+
+[![asciicast](https://asciinema.org/a/382198.svg)](https://asciinema.org/a/382198)
 
 ## Install
 
