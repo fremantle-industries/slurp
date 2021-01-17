@@ -32,6 +32,23 @@ config :slurp,
   }
 ```
 
+## New Head Subscriptions
+
+`new_head_subscriptions` abstract a common interface for streaming incoming blocks. They
+are configured under the `:slurp, :new_head_subscriptions` key.
+
+```elixir
+config :slurp,
+  new_head_subscriptions: %{
+    "*" => [
+      %{
+        enabled: true,
+        handler: {Examples.NewHeadHandler, :handle_new_head, []}
+      }
+    ]
+  }
+```
+
 ## Log Subscriptions
 
 `log_subscriptions` abstract a common interface for scanning events emitted
