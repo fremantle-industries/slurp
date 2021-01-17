@@ -19,6 +19,7 @@ Stream blocks & events from multiple EVM blockchains with a near-uniform API
 | Matic                 |
 | Optimism              |
 | NEAR                  |
+| xDAI                  |
 
 [![asciicast](https://asciinema.org/a/382198.svg)](https://asciinema.org/a/382198)
 
