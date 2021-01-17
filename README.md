@@ -53,6 +53,10 @@ interactive Elixir shell that imports the set of `slurp` helper [commands](./doc
 iex -S mix
 ```
 
+## Chain Details
+
+[https://chainid.network/](https://chainid.network) maintains a list of EVM compatible blockchains including available [RPC providers](https://chainid.network/chains.json).
+
 ## Authors
 
 - Alex Kwiatkowski - alex+git@fremantle.io
