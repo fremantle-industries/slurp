@@ -8,35 +8,38 @@ defmodule Slurp.Commander do
   @type log_subscription :: Logs.LogSubscription.t()
   @type opt_node :: {:node, {module, atom}}
   @type opt_store :: {:store_id, atom}
-  @type opt_filter :: {:filters, list}
+  @type opt_where :: {:where, list}
+  @type opt_order :: {:order, list}
 
   def start_link(_) do
     GenServer.start_link(__MODULE__, :ok, name: __MODULE__)
   end
 
-  @spec blockchains([opt_node | opt_store | opt_filter]) :: [blockchain]
+  @spec blockchains([opt_node | opt_store | opt_where | opt_order]) :: [blockchain]
   def blockchains(opts) do
     opts |> to_dest() |> GenServer.call({:blockchains, opts})
   end
 
-  @spec start_blockchains([opt_node | opt_store | opt_filter]) ::
+  @spec start_blockchains([opt_node | opt_store | opt_where]) ::
           {started :: non_neg_integer(), started_already :: non_neg_integer()}
   def start_blockchains(opts) do
     opts |> to_dest() |> GenServer.call({:start_blockchains, opts})
   end
 
-  @spec stop_blockchains([opt_node | opt_store | opt_filter]) ::
+  @spec stop_blockchains([opt_node | opt_store | opt_where]) ::
           {stopped :: non_neg_integer(), stopped_already :: non_neg_integer()}
   def stop_blockchains(opts) do
     opts |> to_dest() |> GenServer.call({:stop_blockchains, opts})
   end
 
-  @spec new_head_subscriptions([opt_node | opt_store | opt_filter]) :: [new_head_subscription]
+  @spec new_head_subscriptions([opt_node | opt_store | opt_where | opt_order]) :: [
+          new_head_subscription
+        ]
   def new_head_subscriptions(opts) do
     opts |> to_dest() |> GenServer.call({:new_head_subscriptions, opts})
   end
 
-  @spec log_subscriptions([opt_node | opt_store | opt_filter]) :: [log_subscription]
+  @spec log_subscriptions([opt_node | opt_store | opt_where | opt_order]) :: [log_subscription]
   def log_subscriptions(opts) do
     opts |> to_dest() |> GenServer.call({:log_subscriptions, opts})
   end
