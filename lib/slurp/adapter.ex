@@ -22,14 +22,21 @@ defmodule Slurp.Adapter do
           optional(:blockhash) => String.t()
         }
 
+  @type address :: String.t()
+  @type function_signature :: String.t()
+  @type call_arguments :: list
+  @type call_params :: map
+
   @callback block_number(endpoint) :: {:ok, block_number} | {:error, term}
   @callback hash_event_signature(event_signature) :: hashed_event_signature
   @callback log_hashed_event_signature(log) ::
               {:ok, hashed_event_signature} | {:error, term}
   @callback deserialize_log_event(log, log_subscription) :: {:ok, struct} | {:error, term}
   @callback get_logs(map, endpoint) :: {:ok, list} | {:error, term}
+  @callback call(address, function_signature, call_arguments, call_params, endpoint) ::
+              {:ok, term} | {:error, term}
 
-  # TODO: record start/end telemetry
+  # TODO: record start/end telemetry for all RPC calls
   def block_number(blockchain, endpoint) do
     # :telemetry.execute(
     #   [:slurp, :adapter, :request, :start],
@@ -60,8 +67,11 @@ defmodule Slurp.Adapter do
     blockchain.adapter.deserialize_log_event(log, log_subscription)
   end
 
-  # TODO: record start/end telemetry
   def get_logs(blockchain, filter, endpoint) do
     blockchain.adapter.get_logs(filter, endpoint)
+  end
+
+  def call(blockchain, address, function_signature, arguments, params, endpoint) do
+    blockchain.adapter.call(address, function_signature, arguments, params, endpoint)
   end
 end

@@ -61,6 +61,7 @@ defmodule Slurp.Logs.LogFetcher do
   @impl true
   def handle_cast({:new_head, block_number}, state) do
     # TODO: Handle timeout
+    # TODO: Handle rate limit/forbidden
     # TODO: Handle unable to retrieve history lookback
     with {:ok, logs} <- get_logs(block_number, state) do
       Logger.debug("retrieved #{Enum.count(logs)} logs for subscriptions")

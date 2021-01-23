@@ -11,6 +11,9 @@ defmodule Slurp.Adapters.Evm do
   @type log_subscription :: Slurp.Logs.LogSubscription.t()
   @type log_filter :: Slurp.Adapter.log_filter()
   @type log :: Slurp.Adapter.log()
+  @type address :: Slurp.Adapter.address()
+  @type abi_fragment :: term
+  @type call_params :: Slurp.Adapter.call_params()
 
   @spec block_number(endpoint) :: {:ok, block_number} | {:error, term}
   def block_number(endpoint) do
@@ -63,5 +66,24 @@ defmodule Slurp.Adapters.Evm do
   @spec get_logs(log_filter, endpoint) :: {:ok, [log]} | {:error, term}
   def get_logs(filter, endpoint) do
     ExW3.get_logs(filter, url: endpoint)
+  end
+
+  @spec call(address, abi_fragment, list, call_params, endpoint) :: {:ok, term} | {:error, term}
+  def call(address, abi_fragment, arguments, transaction, endpoint) do
+    [function_selector] = [abi_fragment] |> ABI.parse_specification()
+    abi_encoded_data = function_selector |> ABI.encode(arguments) |> Base.encode16(case: :lower)
+    transaction = Map.merge(transaction, %{to: address, data: "0x#{abi_encoded_data}"})
+
+    [transaction, "latest", [url: endpoint]]
+    |> ExW3.eth_call()
+    |> case do
+      {:ok, "0x" <> data} ->
+        bin_data = data |> Base.decode16!(case: :lower)
+        decoded_data = ABI.decode(function_selector, bin_data, :output)
+        {:ok, decoded_data}
+
+      {:error, _err} = error ->
+        error
+    end
   end
 end

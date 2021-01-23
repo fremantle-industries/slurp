@@ -2,6 +2,7 @@ defmodule Slurp.Blockchains do
   alias __MODULE__
 
   @type blockchain :: Blockchains.Blockchain.t()
+  @type blockchain_id :: Blockchains.Blockchain.id()
 
   @spec from_config :: {:ok, list}
   def from_config do
@@ -25,6 +26,11 @@ defmodule Slurp.Blockchains do
 
   def from_config(config) do
     {:error, "invalid env :blockchains for application :slurp. #{inspect(config)} is not a map"}
+  end
+
+  @spec find(blockchain_id) :: {:ok, blockchain} | {:error, :not_found}
+  def find(blockchain_id, store_id \\ Blockchains.BlockchainStore.default_store_id()) do
+    Blockchains.BlockchainStore.find(blockchain_id, store_id)
   end
 
   @spec all :: [blockchain]
