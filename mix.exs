@@ -21,7 +21,10 @@ defmodule Slurp.MixProject do
   def application do
     [
       mod: {Slurp.Application, []},
-      start_phases: [hydrate: []],
+      start_phases: [
+        hydrate: [],
+        blockchains_and_subscriptions: []
+      ],
       extra_applications: [:logger, :iex]
     ]
   end
