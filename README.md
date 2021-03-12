@@ -1,6 +1,6 @@
 # Slurp
 
-[![Build Status](https://github.com/fremantle-industries/slurp/workflows/test/badge.svg?branch=master)](https://github.com/fremantle-industries/slurp/actions?query=workflow%3Atest)
+[![Build Status](https://github.com/fremantle-industries/slurp/workflows/test/badge.svg?branch=main)](https://github.com/fremantle-industries/slurp/actions?query=workflow%3Atest)
 [![hex.pm version](https://img.shields.io/hexpm/v/slurp.svg?style=flat)](https://hex.pm/packages/slurp)
 
 An EVM block ingestion toolkit for Elixir
