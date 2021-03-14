@@ -1,16 +1,17 @@
 defmodule Slurp.Adapters.Evm do
+  alias Slurp.{Adapter, Specs}
   alias __MODULE__
 
-  @behaviour Slurp.Adapter
+  @behaviour Adapter
 
-  @type event_signature :: Slurp.Adapter.event_signature()
-  @type hashed_event_signature :: Slurp.Adapter.hashed_event_signature()
-  @type endpoint :: Slurp.Adapter.endpoint()
-  @type topic :: Slurp.Adapter.topic()
-  @type block_number() :: Slurp.Adapter.block_number()
-  @type log_subscription :: Slurp.Logs.LogSubscription.t()
-  @type log_filter :: Slurp.Adapter.log_filter()
-  @type log :: Slurp.Adapter.log()
+  @type event_signature :: Adapter.event_signature()
+  @type hashed_event_signature :: Adapter.hashed_event_signature()
+  @type endpoint :: Adapter.endpoint()
+  @type topic :: Adapter.topic()
+  @type block_number() :: Adapter.block_number()
+  @type log_subscription :: Specs.LogSubscription.t()
+  @type log_filter :: Adapter.log_filter()
+  @type log :: Adapter.log()
 
   @spec block_number(endpoint) :: {:ok, block_number} | {:error, term}
   def block_number(endpoint) do

@@ -1,7 +1,8 @@
-defmodule Slurp.Blockchains do
+defmodule Slurp.Subscriptions.Blockchains do
+  alias Slurp.{Stores, Specs}
   alias __MODULE__
 
-  @type blockchain :: Blockchains.Blockchain.t()
+  @type blockchain :: Specs.Blockchain.t()
 
   @spec from_config :: {:ok, list}
   def from_config do
@@ -15,7 +16,7 @@ defmodule Slurp.Blockchains do
       |> Enum.reduce(
         [],
         fn {id, c}, acc ->
-          [struct!(Blockchains.Blockchain, Map.put(c, :id, id)) | acc]
+          [struct!(Specs.Blockchain, Map.put(c, :id, id)) | acc]
         end
       )
       |> Enum.reverse()
@@ -28,12 +29,12 @@ defmodule Slurp.Blockchains do
   end
 
   @spec all :: [blockchain]
-  def all(store_id \\ Blockchains.BlockchainStore.default_store_id()) do
-    Blockchains.BlockchainStore.all(store_id)
+  def all(store_id \\ Stores.BlockchainStore.default_store_id()) do
+    Stores.BlockchainStore.all(store_id)
   end
 
-  @spec put(blockchain) :: {:ok, {Blockchains.Blockchain.id(), blockchain}}
-  def put(blockchain, store_id \\ Blockchains.BlockchainStore.default_store_id()) do
-    Blockchains.BlockchainStore.put(blockchain, store_id)
+  @spec put(blockchain) :: {:ok, {Specs.Blockchain.id(), blockchain}}
+  def put(blockchain, store_id \\ Stores.BlockchainStore.default_store_id()) do
+    Stores.BlockchainStore.put(blockchain, store_id)
   end
 end

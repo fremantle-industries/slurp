@@ -1,8 +1,8 @@
 defmodule Slurp.ConnectionSupervisor do
   use Supervisor
-  alias Slurp.{Blockchains, NewHeads, Logs}
+  alias Slurp.{Subscriptions, Stores, Specs, NewHeads, Logs}
 
-  @type blockchain_id :: Blockchains.Blockchain.id()
+  @type blockchain_id :: Specs.Blockchain.id()
 
   @spec start_link(id: blockchain_id) ::
           Supervisor.on_start() | {:error, :blockchain_not_found | :rpc_endpoint_not_found}
@@ -18,10 +18,10 @@ defmodule Slurp.ConnectionSupervisor do
   def process_name(id), do: :"#{__MODULE__}_#{id}"
 
   def init(blockchain: blockchain, endpoint: endpoint) do
-    log_subscriptions = Logs.Subscriptions.query(blockchain_id: blockchain.id, enabled: true)
+    log_subscriptions = Subscriptions.Logs.query(blockchain_id: blockchain.id, enabled: true)
 
     new_head_subscription =
-      NewHeads.Subscriptions.find_by(blockchain_id: blockchain.id, enabled: true)
+      Subscriptions.NewHeads.find_by(blockchain_id: blockchain.id, enabled: true)
 
     children = [
       {NewHeads.NewHeadFetcher,
@@ -34,7 +34,7 @@ defmodule Slurp.ConnectionSupervisor do
   end
 
   defp find_blockchain(id) do
-    case Blockchains.BlockchainStore.find(id) do
+    case Stores.BlockchainStore.find(id) do
       {:ok, _blockchain} = result -> result
       {:error, :not_found} -> {:error, :blockchain_not_found}
     end

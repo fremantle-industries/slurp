@@ -1,4 +1,4 @@
-defmodule Slurp.NewHeads.NewHeadSubscriptionStore do
+defmodule Slurp.Stores.NewHeadSubscriptionStore do
   use Stored.Store
 
   @default_store_id :default

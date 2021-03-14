@@ -1,8 +1,8 @@
-defmodule Slurp.BlockchainsTest do
+defmodule Slurp.Specs.Blockchain.Test do
   use ExUnit.Case
 
   test ".from_config parses Blockchain structs from the application environment" do
-    assert {:ok, blockchains} = Slurp.Blockchains.from_config()
+    assert {:ok, blockchains} = Slurp.Subscriptions.Blockchains.from_config()
 
     assert Enum.count(blockchains) == 2
     assert Enum.at(blockchains, 0).id == "ethereum-mainnet"
@@ -10,7 +10,7 @@ defmodule Slurp.BlockchainsTest do
   end
 
   test ".from_config returns an error when the blockchain config is not a map" do
-    assert Slurp.Blockchains.from_config([]) ==
+    assert Slurp.Subscriptions.Blockchains.from_config([]) ==
              {:error, "invalid env :blockchains for application :slurp. [] is not a map"}
   end
 end

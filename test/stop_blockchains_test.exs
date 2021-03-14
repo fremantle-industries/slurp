@@ -1,4 +1,4 @@
-defmodule Slurp.IEx.Commands.StopBlockchainsTest do
+defmodule Slurp.IEx.Commands.StopBlockchains.Test do
   use ExUnit.Case
   import ExUnit.CaptureIO
   import TestSupport.Blockchains, only: [put_blockchain: 2]
@@ -6,7 +6,7 @@ defmodule Slurp.IEx.Commands.StopBlockchainsTest do
   @test_store_id __MODULE__
 
   setup do
-    start_supervised!({Slurp.Blockchains.BlockchainStore, id: @test_store_id})
+    start_supervised!({Slurp.Stores.BlockchainStore, id: @test_store_id})
     :ok
   end
 

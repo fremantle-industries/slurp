@@ -1,9 +1,9 @@
-defmodule Slurp.NewHeads.Subscriptions do
-  alias Slurp.{Blockchains, NewHeads}
+defmodule Slurp.Subscriptions.NewHeads do
+  alias Slurp.{Stores, Specs}
 
-  @type blockchain :: Blockchains.Blockchain.t()
-  @type new_head_subscription :: NewHeads.NewHeadSubscription.t()
-  @type new_head_subscription_store_id :: NewHeads.NewHeadSubscriptionStore.store_id()
+  @type blockchain :: Specs.Blockchain.t()
+  @type new_head_subscription :: Specs.NewHeadSubscription.t()
+  @type new_head_subscription_store_id :: Stores.NewHeadSubscriptionStore.store_id()
   @type invalid_config :: String.t()
 
   @spec from_config([blockchain]) :: {:ok, [new_head_subscription]} | {:error, invalid_config}
@@ -30,7 +30,7 @@ defmodule Slurp.NewHeads.Subscriptions do
           handlers
           |> Enum.map(fn handler ->
             attrs = Map.put(handler, :blockchain_id, blockchain_id)
-            struct!(NewHeads.NewHeadSubscription, attrs)
+            struct!(Specs.NewHeadSubscription, attrs)
           end)
         end)
       end)
@@ -46,9 +46,9 @@ defmodule Slurp.NewHeads.Subscriptions do
   @spec find_by(list) :: new_head_subscription | nil
   def find_by(filters) do
     with {store_id, filters} <-
-           Keyword.pop(filters, :store_id, NewHeads.NewHeadSubscriptionStore.default_store_id()) do
+           Keyword.pop(filters, :store_id, Stores.NewHeadSubscriptionStore.default_store_id()) do
       store_id
-      |> NewHeads.NewHeadSubscriptionStore.all()
+      |> Stores.NewHeadSubscriptionStore.all()
       |> Enumerati.filter(filters)
       |> case do
         [] -> nil
@@ -60,10 +60,10 @@ defmodule Slurp.NewHeads.Subscriptions do
   @spec all(list) :: [new_head_subscription]
   def all(opts) do
     with {store_id, opts} <-
-           Keyword.pop(opts, :store_id, NewHeads.NewHeadSubscriptionStore.default_store_id()),
+           Keyword.pop(opts, :store_id, Stores.NewHeadSubscriptionStore.default_store_id()),
          filters <- Keyword.get(opts, :where, []) do
       store_id
-      |> NewHeads.NewHeadSubscriptionStore.all()
+      |> Stores.NewHeadSubscriptionStore.all()
       |> Enumerati.filter(filters)
     end
   end
@@ -71,7 +71,7 @@ defmodule Slurp.NewHeads.Subscriptions do
   @spec put(new_head_subscription) :: {:ok, {term, new_head_subscription}}
   @spec put(new_head_subscription, new_head_subscription_store_id) ::
           {:ok, {term, new_head_subscription}}
-  def put(new_head_subscription, store_id \\ NewHeads.NewHeadSubscriptionStore.default_store_id()) do
-    NewHeads.NewHeadSubscriptionStore.put(new_head_subscription, store_id)
+  def put(new_head_subscription, store_id \\ Stores.NewHeadSubscriptionStore.default_store_id()) do
+    Stores.NewHeadSubscriptionStore.put(new_head_subscription, store_id)
   end
 end

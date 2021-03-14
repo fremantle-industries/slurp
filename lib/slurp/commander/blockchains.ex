@@ -1,5 +1,5 @@
 defmodule Slurp.Commander.Blockchains do
-  alias Slurp.Blockchains
+  alias Slurp.{Stores, Subscriptions}
 
   defmodule ListItem do
     defstruct ~w(
@@ -21,12 +21,12 @@ defmodule Slurp.Commander.Blockchains do
 
   @list_default_order ~w(id)a
   def list(opts) do
-    store_id = Keyword.get(opts, :store_id, Blockchains.BlockchainStore.default_store_id())
+    store_id = Keyword.get(opts, :store_id, Stores.BlockchainStore.default_store_id())
     filters = Keyword.get(opts, :where, [])
     order_by = Keyword.get(opts, :order, @list_default_order)
 
     store_id
-    |> Blockchains.all()
+    |> Subscriptions.Blockchains.all()
     |> Enum.map(fn b ->
       %ListItem{
         id: b.id,

@@ -1,15 +1,16 @@
 defmodule TestSupport.Blockchains do
+  alias Slurp.{Specs, Stores}
   def put_blockchain(attributes, store_id) do
     {:ok, _} =
-      Slurp.Blockchains.Blockchain
+      Specs.Blockchain
       |> struct(attributes)
-      |> Slurp.Blockchains.BlockchainStore.put(store_id)
+      |> Stores.BlockchainStore.put(store_id)
   end
 
   def put_blockchain!(attributes, store_id) do
     {:ok, _} =
-      Slurp.Blockchains.Blockchain
+      Specs.Blockchain
       |> struct!(attributes)
-      |> Slurp.Blockchains.BlockchainStore.put(store_id)
+      |> Stores.BlockchainStore.put(store_id)
   end
 end

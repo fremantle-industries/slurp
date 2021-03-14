@@ -1,9 +1,9 @@
 defmodule Slurp.NewHeads.Timer do
   use GenServer
-  alias Slurp.{Blockchains, NewHeads}
+  alias Slurp.{NewHeads, Specs}
 
   defmodule State do
-    @type blockchain :: Blockchains.Blockchain.t()
+    @type blockchain :: Specs.Blockchain.t()
     @type t :: %State{
             blockchain: blockchain
           }
@@ -11,8 +11,8 @@ defmodule Slurp.NewHeads.Timer do
     defstruct ~w[blockchain]a
   end
 
-  @type blockchain :: Blockchains.Blockchain.t()
-  @type blockchain_id :: Blockchains.Blockchain.id()
+  @type blockchain :: Specs.Blockchain.t()
+  @type blockchain_id :: Specs.Blockchain.id()
 
   @spec start_link(blockchain: blockchain) :: GenServer.on_start()
   def start_link(blockchain: blockchain) do

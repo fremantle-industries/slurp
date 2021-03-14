@@ -1,15 +1,15 @@
 defmodule Slurp.Logs.LogFetcher do
   use GenServer
   require Logger
-  alias Slurp.{Adapter, Blockchains, Logs}
+  alias Slurp.{Adapter, Specs}
 
   defmodule State do
     @type block_number :: Adapter.block_number()
     @type hashed_event_signature :: Adapter.hashed_event_signature()
-    @type log_subscription :: Logs.LogSubscription.t()
+    @type log_subscription :: Specs.LogSubscription.t()
 
     @type t :: %State{
-            blockchain: Blockchains.Blockchain.t(),
+            blockchain: Specs.Blockchain.t(),
             endpoint: Adapter.endpoint(),
             subscriptions: %{
               hashed_event_signature => log_subscription
@@ -21,15 +21,15 @@ defmodule Slurp.Logs.LogFetcher do
     defstruct ~w[blockchain endpoint subscriptions topics last_block_number]a
   end
 
-  @type blockchain :: Blockchains.Blockchain.t()
-  @type blockchain_id :: Blockchains.Blockchain.id()
+  @type blockchain :: Specs.Blockchain.t()
+  @type blockchain_id :: Specs.Blockchain.id()
 
   @spec start_link(blockchain: blockchain, subscriptions: [State.log_subscription()]) ::
           GenServer.on_start()
   def start_link(blockchain: blockchain, subscriptions: subscriptions) do
     name = process_name(blockchain.id)
     topics = Enum.map(subscriptions, & &1.hashed_event_signature)
-    {:ok, endpoint} = Blockchains.Blockchain.endpoint(blockchain)
+    {:ok, endpoint} = Specs.Blockchain.endpoint(blockchain)
 
     state = %State{
       blockchain: blockchain,
@@ -65,7 +65,7 @@ defmodule Slurp.Logs.LogFetcher do
       logs
       |> Enum.each(fn log ->
         {:ok, log_hashed_event_signature} =
-          Slurp.Adapter.log_hashed_event_signature(state.blockchain, log)
+          Adapter.log_hashed_event_signature(state.blockchain, log)
 
         state.subscriptions
         |> Map.get(log_hashed_event_signature)
@@ -79,7 +79,7 @@ defmodule Slurp.Logs.LogFetcher do
 
           subscription ->
             with {:ok, event} <-
-                   Slurp.Adapter.deserialize_log_event(state.blockchain, log, subscription) do
+                   Adapter.deserialize_log_event(state.blockchain, log, subscription) do
               {mod, func, extra_args} = subscription.handler
               args = [state.blockchain, log, event] ++ extra_args
               apply(mod, func, args)
@@ -134,6 +134,6 @@ defmodule Slurp.Logs.LogFetcher do
       toBlock: to_hex_block
     }
 
-    Slurp.Adapter.get_logs(state.blockchain, filter, state.endpoint)
+    Adapter.get_logs(state.blockchain, filter, state.endpoint)
   end
 end

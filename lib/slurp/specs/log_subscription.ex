@@ -1,11 +1,12 @@
-defmodule Slurp.Logs.LogSubscription do
+defmodule Slurp.Specs.LogSubscription do
+  alias Slurp.{Adapter, Specs}
   alias __MODULE__
 
   @type t :: %LogSubscription{
           enabled: boolean,
-          blockchain_id: Slurp.Blockchains.Blockchain.id(),
-          event_signature: Slurp.Adapter.event_signature(),
-          hashed_event_signature: Slurp.Adapter.hashed_event_signature(),
+          blockchain_id: Specs.Blockchain.id(),
+          event_signature: Adapter.event_signature(),
+          hashed_event_signature: Adapter.hashed_event_signature(),
           struct: module,
           handler: {module, atom, list},
           abi: [map]

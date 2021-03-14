@@ -1,4 +1,6 @@
 defmodule Slurp.Adapter do
+  alias Slurp.Specs
+
   @type endpoint :: String.t()
 
   @type latest_block_number :: String.t()
@@ -10,7 +12,7 @@ defmodule Slurp.Adapter do
   @type event_signature :: String.t()
   @type hashed_event_signature :: String.t()
   @type topic :: String.t()
-  @type log_subscription :: Slurp.Logs.LogSubscription.t()
+  @type log_subscription :: Specs.LogSubscription.t()
   @type log :: map
   @type log_filter :: %{
           optional(:address) => String.t(),

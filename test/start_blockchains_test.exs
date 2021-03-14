@@ -1,4 +1,4 @@
-defmodule Slurp.IEx.Commands.StartBlockchainsTest do
+defmodule Slurp.IEx.Commands.StartBlockchains.Test do
   use ExUnit.Case
   import ExUnit.CaptureIO
   import TestSupport.Blockchains, only: [put_blockchain: 2]
@@ -11,7 +11,7 @@ defmodule Slurp.IEx.Commands.StartBlockchainsTest do
       Slurp.ConnectionsSupervisor.terminate_connection("ethereum-ropsten")
     end)
 
-    start_supervised!({Slurp.Blockchains.BlockchainStore, id: @test_store_id})
+    start_supervised!({Slurp.Stores.BlockchainStore, id: @test_store_id})
     :ok
   end
 

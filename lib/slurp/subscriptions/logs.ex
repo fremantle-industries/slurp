@@ -1,10 +1,10 @@
-defmodule Slurp.Logs.Subscriptions do
-  alias Slurp.{Blockchains, Logs}
+defmodule Slurp.Subscriptions.Logs do
+  alias Slurp.{Stores, Specs}
 
-  @type blockchain :: Blockchains.Blockchain.t()
-  @type blockchain_id :: Blockchains.Blockchain.id()
-  @type log_subscription :: Logs.LogSubscription.t()
-  @type log_subscription_store_id :: Logs.LogSubscriptionStore.store_id()
+  @type blockchain :: Specs.Blockchain.t()
+  @type blockchain_id :: Specs.Blockchain.id()
+  @type log_subscription :: Specs.LogSubscription.t()
+  @type log_subscription_store_id :: Stores.LogSubscriptionStore.store_id()
   @type invalid_config :: String.t()
 
   @spec from_config([blockchain]) :: {:ok, [log_subscription]} | {:error, invalid_config}
@@ -41,7 +41,7 @@ defmodule Slurp.Logs.Subscriptions do
                   hashed_event_signature: hashed_event_signature
                 })
 
-              struct!(Logs.LogSubscription, attrs)
+              struct!(Specs.LogSubscription, attrs)
             end)
           end)
         end)
@@ -57,24 +57,24 @@ defmodule Slurp.Logs.Subscriptions do
 
   @spec all :: [log_subscription]
   @spec all(log_subscription_store_id) :: [log_subscription]
-  def all(store_id \\ Logs.LogSubscriptionStore.default_store_id()) do
-    Logs.LogSubscriptionStore.all(store_id)
+  def all(store_id \\ Stores.LogSubscriptionStore.default_store_id()) do
+    Stores.LogSubscriptionStore.all(store_id)
   end
 
   @spec query(list) :: [log_subscription]
   def query(filters) do
-    store_id = Keyword.get(filters, :store_id, Logs.LogSubscriptionStore.default_store_id())
+    store_id = Keyword.get(filters, :store_id, Stores.LogSubscriptionStore.default_store_id())
 
     Keyword.delete(filters, :store_id)
 
     store_id
-    |> Logs.LogSubscriptionStore.all()
+    |> Stores.LogSubscriptionStore.all()
     |> Enumerati.filter(filters)
   end
 
   @spec put(log_subscription) :: {:ok, {term, log_subscription}}
   @spec put(log_subscription, log_subscription_store_id) :: {:ok, {term, log_subscription}}
-  def put(log_subscription, store_id \\ Logs.LogSubscriptionStore.default_store_id()) do
-    Logs.LogSubscriptionStore.put(log_subscription, store_id)
+  def put(log_subscription, store_id \\ Stores.LogSubscriptionStore.default_store_id()) do
+    Stores.LogSubscriptionStore.put(log_subscription, store_id)
   end
 end

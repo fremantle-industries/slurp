@@ -1,11 +1,11 @@
 defmodule Slurp.Commander do
   use GenServer
   alias __MODULE__
-  alias Slurp.{Blockchains, NewHeads, Logs}
+  alias Slurp.{Stores, Specs, Subscriptions}
 
-  @type blockchain :: Blockchains.Blockchain.t()
-  @type new_head_subscription :: NewHeads.NewHeadSubscription.t()
-  @type log_subscription :: Logs.LogSubscription.t()
+  @type blockchain :: Specs.Blockchain.t()
+  @type new_head_subscription :: Specs.NewHeadSubscription.t()
+  @type log_subscription :: Specs.LogSubscription.t()
   @type opt_node :: {:node, {module, atom}}
   @type opt_store :: {:store_id, atom}
   @type opt_where :: {:where, list}
@@ -54,12 +54,12 @@ defmodule Slurp.Commander do
   end
 
   def handle_call({:start_blockchains, opts}, _from, state) do
-    store_id = Keyword.get(opts, :store_id, Blockchains.BlockchainStore.default_store_id())
+    store_id = Keyword.get(opts, :store_id, Stores.BlockchainStore.default_store_id())
     filters = Keyword.get(opts, :where, [])
 
     {started, started_already} =
       store_id
-      |> Blockchains.all()
+      |> Subscriptions.Blockchains.all()
       |> Enumerati.filter(filters)
       |> Enum.map(& &1.id)
       |> Enum.reduce(
@@ -87,12 +87,12 @@ defmodule Slurp.Commander do
   end
 
   def handle_call({:stop_blockchains, opts}, _from, state) do
-    store_id = Keyword.get(opts, :store_id, Blockchains.BlockchainStore.default_store_id())
+    store_id = Keyword.get(opts, :store_id, Stores.BlockchainStore.default_store_id())
     filters = Keyword.get(opts, :where, [])
 
     {stopped, stopped_already} =
       store_id
-      |> Blockchains.all()
+      |> Subscriptions.Blockchains.all()
       |> Enumerati.filter(filters)
       |> Enum.map(& &1.id)
       |> Enum.reduce(
@@ -115,11 +115,11 @@ defmodule Slurp.Commander do
   def handle_call({:log_subscriptions, opts}, _from, state) do
     order_by = Keyword.get(opts, :order, @log_subscriptions_default_order)
     filters = Keyword.get(opts, :where, [])
-    store_id = Keyword.get(opts, :store_id, Logs.LogSubscriptionStore.default_store_id())
+    store_id = Keyword.get(opts, :store_id, Stores.LogSubscriptionStore.default_store_id())
 
     log_subscriptions =
       store_id
-      |> Slurp.Logs.Subscriptions.all()
+      |> Subscriptions.Logs.all()
       |> Enumerati.filter(filters)
       |> Enumerati.order(order_by)
 
@@ -132,7 +132,7 @@ defmodule Slurp.Commander do
 
     new_head_subscriptions =
       opts
-      |> NewHeads.Subscriptions.all()
+      |> Subscriptions.NewHeads.all()
       |> Enumerati.order(order_by)
 
     {:reply, new_head_subscriptions, state}

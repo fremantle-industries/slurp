@@ -1,10 +1,10 @@
 defmodule Slurp.NewHeads.NewHeadFetcher do
   use GenServer
   require Logger
-  alias Slurp.{Blockchains, Logs}
+  alias Slurp.{Adapter, Logs, Specs}
 
   defmodule State do
-    @type blockchain :: Blockchains.Blockchain.t()
+    @type blockchain :: Specs.Blockchain.t()
     @type subscription :: mfa | nil
     @type t :: %State{
             blockchain: blockchain,
@@ -16,11 +16,11 @@ defmodule Slurp.NewHeads.NewHeadFetcher do
     defstruct ~w[blockchain endpoint subscription last_block_number]a
   end
 
-  @type blockchain_id :: Blockchains.Blockchain.id()
+  @type blockchain_id :: Specs.Blockchain.id()
 
   @spec start_link(
           blockchain: State.blockchain(),
-          endpoint: Slurp.Adapter.endpoint(),
+          endpoint: Adapter.endpoint(),
           subscription: State.subscription()
         ) :: GenServer.on_start()
   def start_link(blockchain: blockchain, endpoint: endpoint, subscription: subscription) do
@@ -45,7 +45,7 @@ defmodule Slurp.NewHeads.NewHeadFetcher do
   end
 
   def handle_cast(:check, state) do
-    {:ok, block_number} = Slurp.Adapter.block_number(state.blockchain, state.endpoint)
+    {:ok, block_number} = Adapter.block_number(state.blockchain, state.endpoint)
 
     if state.last_block_number == nil || block_number > state.last_block_number do
       Logger.debug(

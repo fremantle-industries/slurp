@@ -1,4 +1,4 @@
-defmodule Slurp.NewHeads.NewHeadFetcherTest do
+defmodule Slurp.NewHeads.NewHeadFetcher.Test do
   use ExUnit.Case
 
   # defmodule LogResponseHandler do

@@ -1,9 +1,10 @@
-defmodule Slurp.NewHeads.NewHeadSubscription do
+defmodule Slurp.Specs.NewHeadSubscription do
+  alias Slurp.Specs
   alias __MODULE__
 
   @type t :: %NewHeadSubscription{
           enabled: boolean,
-          blockchain_id: Slurp.Blockchains.Blockchain.id(),
+          blockchain_id: Specs.Blockchain.id(),
           handler: {module, atom, list}
         }
 

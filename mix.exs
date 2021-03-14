@@ -11,7 +11,7 @@ defmodule Slurp.MixProject do
       elixirc_paths: elixirc_paths(Mix.env()),
       deps: deps(),
       package: package(),
-      test_paths: ["lib"],
+      test_paths: ["test"],
       dialyzer: [
         ignore_warnings: ".dialyzer_ignore.exs"
       ]
@@ -57,6 +57,7 @@ defmodule Slurp.MixProject do
     }
   end
 
-  defp elixirc_paths(env) when env == :test or env == :dev, do: ["lib", "examples"]
+  defp elixirc_paths(env) when env == :test, do: ["lib", "test/support"]
+  defp elixirc_paths(env) when env == :dev, do: ["lib", "examples"]
   defp elixirc_paths(_), do: ["lib"]
 end

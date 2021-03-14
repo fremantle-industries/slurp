@@ -1,7 +1,8 @@
 defmodule Slurp.ConnectionsSupervisor do
+  alias Slurp.Specs
   use DynamicSupervisor
 
-  @type blockchain_id :: Slurp.Blockchains.Blockchain.id()
+  @type blockchain_id :: Specs.Blockchain.id()
 
   @spec start_link(term) :: Supervisor.on_start()
   def start_link(_) do

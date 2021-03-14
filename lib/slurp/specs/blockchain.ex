@@ -1,4 +1,4 @@
-defmodule Slurp.Blockchains.Blockchain do
+defmodule Slurp.Specs.Blockchain do
   alias __MODULE__
 
   @type id :: String.t()

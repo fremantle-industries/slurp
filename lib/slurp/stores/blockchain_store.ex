@@ -1,4 +1,4 @@
-defmodule Slurp.Logs.LogSubscriptionStore do
+defmodule Slurp.Stores.BlockchainStore do
   use Stored.Store
 
   @default_store_id :default
