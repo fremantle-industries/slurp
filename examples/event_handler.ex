@@ -5,6 +5,11 @@ defmodule Examples.EventHandler do
     handle_event(blockchain, log, event)
   end
 
+  def handle_erc20_specific_address_approval(blockchain, %{"address" => address} = log, event) do
+    Logger.info "received event: #{inspect event} for specific contract address: #{inspect address}"
+    handle_event(blockchain, log, event)
+  end
+
   def handle_erc20_transfer(blockchain, log, event) do
     handle_event(blockchain, log, event)
   end
