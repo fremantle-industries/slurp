@@ -88,6 +88,41 @@ config :slurp,
           ]
         }
       ],
+      {"Approval(address,address,uint256)",
+      [
+        "0xaFF4481D10270F50f203E0763e2597776068CBc5",
+        "0x000000000000000000000000000000000000dead"
+      ]} => [
+        %{
+          enabled: true,
+          struct: Examples.Erc20.Events.Approval,
+          handler: {Examples.EventHandler, :handle_erc20_approval, []},
+          abi: [
+            %{
+              "anonymous" => false,
+              "inputs" => [
+                %{
+                  "indexed" => true,
+                  "name" => "owner",
+                  "type" => "address"
+                },
+                %{
+                  "indexed" => true,
+                  "name" => "spender",
+                  "type" => "address"
+                },
+                %{
+                  "indexed" => false,
+                  "name" => "value",
+                  "type" => "uint256"
+                }
+              ],
+              "name" => "Approval",
+              "type" => "event"
+            }
+          ]
+        }
+      ],
       "Transfer(address,address,uint256)" => [
         %{
           enabled: false,

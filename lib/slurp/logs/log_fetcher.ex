@@ -7,6 +7,7 @@ defmodule Slurp.Logs.LogFetcher do
     @type block_number :: Adapter.block_number()
     @type hashed_event_signature :: Adapter.hashed_event_signature()
     @type log_subscription :: Logs.LogSubscription.t()
+    @type address :: String.t()
 
     @type t :: %State{
             blockchain: Blockchains.Blockchain.t(),
@@ -15,10 +16,11 @@ defmodule Slurp.Logs.LogFetcher do
               hashed_event_signature => log_subscription
             },
             topics: [hashed_event_signature],
+            address: [address],
             last_block_number: block_number | nil
           }
 
-    defstruct ~w[blockchain endpoint subscriptions topics last_block_number]a
+    defstruct ~w[blockchain endpoint subscriptions topics address last_block_number]a
   end
 
   @type blockchain :: Blockchains.Blockchain.t()
@@ -29,13 +31,15 @@ defmodule Slurp.Logs.LogFetcher do
   def start_link(blockchain: blockchain, subscriptions: subscriptions) do
     name = process_name(blockchain.id)
     topics = Enum.map(subscriptions, & &1.hashed_event_signature)
+    addresses = Enum.map(subscriptions, & &1.address)
     {:ok, endpoint} = Blockchains.Blockchain.endpoint(blockchain)
 
     state = %State{
       blockchain: blockchain,
       endpoint: endpoint,
       subscriptions: index_subscriptions(subscriptions),
-      topics: topics
+      topics: topics,
+      address: addresses
     }
 
     GenServer.start_link(__MODULE__, state, name: name)
@@ -81,8 +85,14 @@ defmodule Slurp.Logs.LogFetcher do
             with {:ok, event} <-
                    Slurp.Adapter.deserialize_log_event(state.blockchain, log, subscription) do
               {mod, func, extra_args} = subscription.handler
-              args = [state.blockchain, log, event] ++ extra_args
-              apply(mod, func, args)
+              args = [state.blockchain, log, event]
+              if subscription.address != "" do
+                args = args ++ [subscription.address] ++ extra_args
+                apply(mod, func, args)
+              else
+                args = args ++ extra_args
+                apply(mod, func, args)
+              end
             else
               {:error, reason} ->
                 Logger.warn("could not deserialize log event: #{inspect(reason)}")
@@ -133,6 +143,10 @@ defmodule Slurp.Logs.LogFetcher do
       fromBlock: from_hex_block,
       toBlock: to_hex_block
     }
+
+    if length(state.address) > 0 do
+      Map.put(filter, :address, state.address)
+    end
 
     Slurp.Adapter.get_logs(state.blockchain, filter, state.endpoint)
   end

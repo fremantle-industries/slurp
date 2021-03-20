@@ -8,7 +8,8 @@ defmodule Slurp.Logs.LogSubscription do
           hashed_event_signature: Slurp.Adapter.hashed_event_signature(),
           struct: module,
           handler: {module, atom, list},
-          abi: [map]
+          abi: [map],
+          address: String.t()
         }
 
   defstruct ~w[
@@ -19,11 +20,12 @@ defmodule Slurp.Logs.LogSubscription do
     struct
     handler
     abi
+    address
   ]a
 
   defimpl Stored.Item do
     def key(log_subscription) do
-      {log_subscription.blockchain_id, log_subscription.event_signature}
+      {log_subscription.blockchain_id, log_subscription.event_signature, log_subscription.address}
     end
   end
 end
