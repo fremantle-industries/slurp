@@ -37,16 +37,18 @@ defmodule Slurp.Adapters.Evm do
   def deserialize_log_event(log, log_subscription) do
     [_hashed_event_signature | indexed_topics] = log["topics"]
 
-    log_subscription.abi
+    {rt_code, log_event} = log_subscription.abi
     |> Enum.reduce(
       :ok,
       fn
         abi, :ok ->
           with {:ok, _event} = result <-
                  Evm.Abi.deserialize_log_into(log, log_subscription.struct, abi, indexed_topics) do
+
             result
           else
-            {:error, reason} -> {:error, [reason]}
+            {:error, reason} ->
+              {:error, [reason]}
           end
 
         abi, {:error, reasons} ->
@@ -61,6 +63,7 @@ defmodule Slurp.Adapters.Evm do
           acc
       end
     )
+    {rt_code, Map.merge(log_event, %{address: log["address"]})}
   end
 
   @spec get_logs(log_filter, endpoint) :: {:ok, [log]} | {:error, term}

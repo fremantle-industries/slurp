@@ -7,6 +7,7 @@ defmodule Slurp.Logs.LogFetcher do
     @type block_number :: Adapter.block_number()
     @type hashed_event_signature :: Adapter.hashed_event_signature()
     @type log_subscription :: Logs.LogSubscription.t()
+    @type address :: Slurp.Adapter.address
 
     @type t :: %State{
             blockchain: Blockchains.Blockchain.t(),
@@ -15,10 +16,11 @@ defmodule Slurp.Logs.LogFetcher do
               hashed_event_signature => log_subscription
             },
             topics: [hashed_event_signature],
+            address: [address],
             last_block_number: block_number | nil
           }
 
-    defstruct ~w[blockchain endpoint subscriptions topics last_block_number]a
+    defstruct ~w[blockchain endpoint subscriptions topics address last_block_number]a
   end
 
   @type blockchain :: Blockchains.Blockchain.t()
@@ -30,13 +32,18 @@ defmodule Slurp.Logs.LogFetcher do
   def start_link(blockchain: blockchain, subscriptions: subscriptions) do
     name = process_name(blockchain.id)
     topics = Enum.map(subscriptions, & &1.hashed_event_signature)
+    |> Enum.uniq()
+
+    addresses = Enum.map(subscriptions, & &1.address)
+    |> Enum.filter(& &1 != nil)
     {:ok, endpoint} = Blockchains.Blockchain.endpoint(blockchain)
 
     state = %State{
       blockchain: blockchain,
       endpoint: endpoint,
       subscriptions: index_subscriptions(subscriptions),
-      topics: topics
+      topics: topics,
+      address: addresses
     }
 
     GenServer.start_link(__MODULE__, state, name: name)
@@ -141,10 +148,13 @@ defmodule Slurp.Logs.LogFetcher do
     {:ok, to_hex_block} = to_block |> Slurp.Utils.integer_to_hex()
 
     %{
-      topics: [state.topics],
+      topics: state.topics,
       from_block: from_hex_block,
       to_block: to_hex_block
     }
     |> ProperCase.to_camel_case()
+    |> build_filter(state)
   end
+  defp build_filter(filter, %State{address: addr}) when length(addr) > 0, do: Map.put(filter, :address, addr)
+  defp build_filter(filter, _), do: filter
 end
