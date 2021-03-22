@@ -10,11 +10,11 @@ defmodule Slurp.Blockchains.Blockchain do
           network_id: pos_integer,
           chain_id: pos_integer,
           chain: String.t(),
-          testnet: bool,
-          start_on_boot: boolean(),
-          timeout: pos_integer(),
-          new_head_initial_history: pos_integer(),
-          poll_interval_ms: non_neg_integer(),
+          testnet: boolean,
+          start_on_boot: boolean,
+          timeout: pos_integer,
+          new_head_initial_history: pos_integer,
+          poll_interval_ms: non_neg_integer,
           rpc: [endpoint]
         }
 
