@@ -52,11 +52,13 @@ defmodule Slurp.Logs.LogFetcher do
   @spec process_name(blockchain_id) :: atom
   def process_name(id), do: :"#{__MODULE__}_#{id}"
 
+  @impl true
   def init(state) do
     Logger.metadata(blockchain_id: state.blockchain.id)
     {:ok, state}
   end
 
+  @impl true
   def handle_cast({:new_head, block_number}, state) do
     # TODO: Handle timeout
     # TODO: Handle unable to retrieve history lookback
