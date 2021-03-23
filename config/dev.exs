@@ -120,7 +120,7 @@ config :slurp,
         }
       ],
       # UniswapV2
-      "Mint(address,uint,uint)" => [
+      "Mint(address,uint256,uint256)" => [
         %{
           enabled: false,
           struct: Examples.UniswapV2.Events.Mint,
@@ -137,12 +137,12 @@ config :slurp,
                 %{
                   "indexed" => false,
                   "name" => "amount0",
-                  "type" => "uint"
+                  "type" => "uint256"
                 },
                 %{
                   "indexed" => false,
                   "name" => "amount1",
-                  "type" => "uint"
+                  "type" => "uint256"
                 }
               ],
               "name" => "Mint",
@@ -151,7 +151,7 @@ config :slurp,
           ]
         }
       ],
-      "Burn(address,uint,uint,address)" => [
+      "Burn(address,uint256,uint256,address)" => [
         %{
           enabled: false,
           struct: Examples.UniswapV2.Events.Burn,
@@ -168,12 +168,12 @@ config :slurp,
                 %{
                   "indexed" => false,
                   "name" => "amount0",
-                  "type" => "uint"
+                  "type" => "uint256"
                 },
                 %{
                   "indexed" => false,
                   "name" => "amount1",
-                  "type" => "uint"
+                  "type" => "uint256"
                 },
                 %{
                   "indexed" => true,
@@ -187,7 +187,7 @@ config :slurp,
           ]
         }
       ],
-      "Swap(address,uint,uint,uint,uint,address)" => [
+      "Swap(address,uint256,uint256,uint256,uint256,address)" => [
         %{
           enabled: false,
           struct: Examples.UniswapV2.Events.Swap,
@@ -204,22 +204,22 @@ config :slurp,
                 %{
                   "indexed" => false,
                   "name" => "amount0In",
-                  "type" => "uint"
+                  "type" => "uint256"
                 },
                 %{
                   "indexed" => false,
                   "name" => "amount1In",
-                  "type" => "uint"
+                  "type" => "uint256"
                 },
                 %{
                   "indexed" => false,
                   "name" => "amount0Out",
-                  "type" => "uint"
+                  "type" => "uint256"
                 },
                 %{
                   "indexed" => false,
                   "name" => "amount1Out",
-                  "type" => "uint"
+                  "type" => "uint256"
                 },
                 %{
                   "indexed" => true,
