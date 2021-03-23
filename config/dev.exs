@@ -12,7 +12,7 @@ end
 config :slurp,
   blockchains: %{
     "ethereum-mainnet" => %{
-      start_on_boot: false,
+      start_on_boot: true,
       name: "Ethereum Mainnet",
       adapter: Slurp.Adapters.Evm,
       network_id: 1,
@@ -20,14 +20,14 @@ config :slurp,
       chain: "ETH",
       testnet: false,
       timeout: 5000,
-      new_head_initial_history: 128,
+      new_head_initial_history: 0,
       poll_interval_ms: 2_500,
       rpc: [
         "https://cloudflare-eth.com"
       ]
     },
     "binance-smart-chain-mainnet" => %{
-      start_on_boot: false,
+      start_on_boot: true,
       name: "Binance Smart Chain Mainnet",
       adapter: Slurp.Adapters.Evm,
       network_id: 56,
@@ -35,7 +35,7 @@ config :slurp,
       chain: "BSC",
       testnet: false,
       timeout: 5000,
-      new_head_initial_history: 128,
+      new_head_initial_history: 0,
       poll_interval_ms: 1_000,
       rpc: [
         "https://bsc-dataseed1.binance.org"
