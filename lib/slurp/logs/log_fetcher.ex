@@ -23,8 +23,9 @@ defmodule Slurp.Logs.LogFetcher do
 
   @type blockchain :: Blockchains.Blockchain.t()
   @type blockchain_id :: Blockchains.Blockchain.id()
+  @type log_subscription :: Logs.LogSubscription.t()
 
-  @spec start_link(blockchain: blockchain, subscriptions: [State.log_subscription()]) ::
+  @spec start_link(blockchain: blockchain, subscriptions: [log_subscription]) ::
           GenServer.on_start()
   def start_link(blockchain: blockchain, subscriptions: subscriptions) do
     name = process_name(blockchain.id)
@@ -85,7 +86,11 @@ defmodule Slurp.Logs.LogFetcher do
               apply(mod, func, args)
             else
               {:error, reason} ->
-                Logger.warn("could not deserialize log event: #{inspect(reason)}")
+                Logger.warn(
+                  "could not deserialize log event '#{subscription.event_signature}': #{
+                    inspect(reason)
+                  }"
+                )
             end
         end
       end)
