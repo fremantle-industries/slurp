@@ -39,26 +39,38 @@ defmodule Slurp.NewHeads.NewHeadFetcher do
     |> GenServer.cast(:check)
   end
 
+  @impl true
   def init(state) do
     Logger.metadata(blockchain_id: state.blockchain.id)
     {:ok, state}
   end
 
+  @impl true
   def handle_cast(:check, state) do
-    {:ok, block_number} = Slurp.Adapter.block_number(state.blockchain, state.endpoint)
+    state.blockchain
+    |> Slurp.Adapter.block_number(state.endpoint)
+    |> case do
+      {:ok, block_number} ->
+        if state.last_block_number == nil || block_number > state.last_block_number do
+          Logger.debug(
+            "received new head: #{inspect(block_number)}, previous: #{
+              state.last_block_number || "-"
+            }"
+          )
 
-    if state.last_block_number == nil || block_number > state.last_block_number do
-      Logger.debug(
-        "received new head: #{inspect(block_number)}, previous: #{state.last_block_number || "-"}"
-      )
+          state = %{state | last_block_number: block_number}
+          {:noreply, state, {:continue, {:publish, block_number}}}
+        else
+          {:noreply, state}
+        end
 
-      state = %{state | last_block_number: block_number}
-      {:noreply, state, {:continue, {:publish, block_number}}}
-    else
-      {:noreply, state}
+      {:error, :timeout} ->
+        Logger.warn("could not fetch latest block number for #{state.blockchain.id}")
+        {:noreply, state}
     end
   end
 
+  @impl true
   def handle_continue({:publish, block_number}, state) do
     Logs.LogFetcher.new_head(state.blockchain.id, block_number)
     call_subscription(block_number, state)
