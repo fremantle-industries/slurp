@@ -38,7 +38,7 @@ defmodule Slurp.MixProject do
       {:stored, "~> 0.0.7"},
       {:table_rex, "~> 3.0"},
       {:telemetry, "~> 0.4"},
-      {:logger_file_backend, "~> 0.0.10", only: [:dev, :test]},
+      {:logger_file_backend, "~> 0.0.10", only: [:dev, :test, :rinkeby]},
       {:dialyxir, "~> 1.0", only: :dev, runtime: false},
       {:mix_test_watch, "~> 1.0", only: :dev, runtime: false},
       {:ex_unit_notifier, "~> 1.0", only: :test}
@@ -57,6 +57,6 @@ defmodule Slurp.MixProject do
     }
   end
 
-  defp elixirc_paths(env) when env == :test or env == :dev, do: ["lib", "examples"]
+  defp elixirc_paths(env) when env == :test or env == :dev or env == :rinkeby, do: ["lib", "examples"]
   defp elixirc_paths(_), do: ["lib"]
 end
