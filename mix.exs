@@ -35,6 +35,7 @@ defmodule Slurp.MixProject do
       {:ex_doc, "~> 0.22"},
       {:exw3, "~> 0.5"},
       {:juice, "~> 0.0.3"},
+      {:proper_case, "~> 1.0"},
       {:stored, "~> 0.0.7"},
       {:table_rex, "~> 3.0"},
       {:telemetry, "~> 0.4"},

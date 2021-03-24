@@ -131,16 +131,19 @@ defmodule Slurp.Logs.LogFetcher do
 
     Logger.debug("get logs for new head from: #{from_block}, to: #{to_block}")
 
+    filter = build_filter(from_block, to_block, state)
+    Slurp.Adapter.get_logs(state.blockchain, filter, state.endpoint)
+  end
+
+  defp build_filter(from_block, to_block, state) do
     {:ok, from_hex_block} = from_block |> Slurp.Utils.integer_to_hex()
     {:ok, to_hex_block} = to_block |> Slurp.Utils.integer_to_hex()
 
-    # TODO: Support decamelized keys
-    filter = %{
+    %{
       topics: [state.topics],
-      fromBlock: from_hex_block,
-      toBlock: to_hex_block
+      from_block: from_hex_block,
+      to_block: to_hex_block
     }
-
-    Slurp.Adapter.get_logs(state.blockchain, filter, state.endpoint)
+    |> ProperCase.to_camel_case()
   end
 end
