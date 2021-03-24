@@ -29,7 +29,7 @@ Stream blocks & events from multiple EVM blockchains with a near-uniform API
 
 ```elixir
 def deps do
-  [{:slurp, "~> 0.0.3"}]
+  [{:slurp, "~> 0.0.4"}]
 end
 ```
 
