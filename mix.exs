@@ -5,7 +5,7 @@ defmodule Slurp.MixProject do
     [
       app: :slurp,
       version: "0.0.4",
-      elixir: "~> 1.8",
+      elixir: "~> 1.11",
       start_permanent: Mix.env() == :prod,
       description: description(),
       elixirc_paths: elixirc_paths(Mix.env()),

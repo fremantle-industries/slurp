@@ -25,7 +25,7 @@ Stream blocks & events from multiple EVM blockchains with a near-uniform API
 
 ## Install
 
-`slurp` requires Elixir 1.8+ & Erlang/OTP 21+. Add `slurp` to your list of dependencies in `mix.exs`
+`slurp` requires Elixir 1.11+ & Erlang/OTP 22+. Add `slurp` to your list of dependencies in `mix.exs`
 
 ```elixir
 def deps do
