@@ -4,7 +4,7 @@ defmodule Slurp.MixProject do
   def project do
     [
       app: :slurp,
-      version: "0.0.4",
+      version: "0.0.5",
       elixir: "~> 1.11",
       start_permanent: Mix.env() == :prod,
       description: description(),
