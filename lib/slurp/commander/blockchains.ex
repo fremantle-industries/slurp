@@ -2,7 +2,7 @@ defmodule Slurp.Commander.Blockchains do
   alias Slurp.Blockchains
 
   defmodule ListItem do
-    defstruct ~w(
+    defstruct ~w[
       id
       name
       adapter
@@ -14,9 +14,10 @@ defmodule Slurp.Commander.Blockchains do
       timeout
       new_head_initial_history
       poll_interval_ms
+      explorer
       rpc
       status
-    )a
+    ]a
   end
 
   @list_default_order ~w(id)a
@@ -40,6 +41,7 @@ defmodule Slurp.Commander.Blockchains do
         timeout: b.timeout,
         new_head_initial_history: b.new_head_initial_history,
         poll_interval_ms: b.poll_interval_ms,
+        explorer: b.explorer,
         rpc: b.rpc,
         status: status(b)
       }

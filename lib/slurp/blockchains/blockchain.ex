@@ -3,6 +3,8 @@ defmodule Slurp.Blockchains.Blockchain do
 
   @type id :: String.t()
   @type endpoint :: String.t()
+  @type explorer_adapter :: module
+  @type explorer_endpoint :: String.t()
   @type t :: %Blockchain{
           id: id,
           name: String.t(),
@@ -15,6 +17,7 @@ defmodule Slurp.Blockchains.Blockchain do
           timeout: pos_integer,
           new_head_initial_history: pos_integer,
           poll_interval_ms: non_neg_integer,
+          explorer: {explorer_adapter, explorer_endpoint} | nil,
           rpc: [endpoint]
         }
 
@@ -30,6 +33,7 @@ defmodule Slurp.Blockchains.Blockchain do
     timeout
     new_head_initial_history
     poll_interval_ms
+    explorer
     rpc
   ]a
 

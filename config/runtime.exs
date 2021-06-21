@@ -29,6 +29,7 @@ if config_env() == :dev do
         timeout: 5000,
         new_head_initial_history: 0,
         poll_interval_ms: 2_500,
+        explorer: {Slurp.ExplorerAdapters.Etherscan, "https://etherscan.io"},
         rpc: [
           "https://cloudflare-eth.com"
         ]
@@ -44,6 +45,7 @@ if config_env() == :dev do
         timeout: 5000,
         new_head_initial_history: 0,
         poll_interval_ms: 1_000,
+        explorer: {Slurp.ExplorerAdapters.BscScan, "https://bscscan.com"},
         rpc: [
           "https://bsc-dataseed1.binance.org"
         ]
