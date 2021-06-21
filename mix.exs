@@ -33,6 +33,9 @@ defmodule Slurp.MixProject do
     [
       {:enumerati, "~> 0.0.8"},
       {:ex_doc, "~> 0.22"},
+      # ex_abi 0.5.3 changes the output decoder which breaks slurp
+      # https://github.com/poanetwork/ex_abi/pull/50/files
+      {:ex_abi, "0.5.2"},
       {:exw3, "~> 0.5"},
       {:juice, "~> 0.0.3"},
       {:proper_case, "~> 1.0"},
