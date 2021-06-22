@@ -5,7 +5,7 @@
 
 An EVM block ingestion toolkit for Elixir
 
-[Install](#install) | [Usage](#usage) | [Commands](./docs/COMMANDS.md) | [Configuration](./docs/CONFIGURATION.md)
+[Built with Slurp](./docs/BUILT_WITH_SLURP.md) | [Install](#install) | [Usage](#usage) | [Commands](./docs/COMMANDS.md) | [Configuration](./docs/CONFIGURATION.md)
 
 ## What Can I Do? TLDR;
 

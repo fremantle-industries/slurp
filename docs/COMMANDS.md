@@ -1,6 +1,6 @@
 # Commands
 
-[Install](../README.md#install) | [Usage](../README.md#usage) | [Commands](./COMMANDS.md) | [Configuration](./CONFIGURATION.md)
+[Built with Slurp](./BUILT_WITH_SLURP.md) | [Install](../README.md#install) | [Usage](../README.md#usage) | [Commands](./COMMANDS.md) | [Configuration](./CONFIGURATION.md)
 
 To control your instance `slurp` provides the following set of IEx commands.
 

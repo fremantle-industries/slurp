@@ -1,8 +1,8 @@
 # Configuration
 
-[Install](#install) | [Usage](#usage) | [Commands](./COMMANDS.md) | [Configuration](./CONFIGURATION.md)
+[Built with Slurp](./BUILT_WITH_SLURP.md) | [Install](#install) | [Usage](#usage) | [Commands](./COMMANDS.md) | [Configuration](./CONFIGURATION.md)
 
-To quickly get started, take a look at the [example dev configuration](../config/dev.exs) for some available options.
+Use the [example dev configuration](../config/runtime.exs#L18) to get started.
 
 ## Global
 
