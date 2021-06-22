@@ -14,12 +14,12 @@ Stream blocks & events from multiple EVM blockchains with a near-uniform API
 | Supported Blockchains |
 | --------------------- |
 | Ethereum              |
-| Ethereum Classic      |
 | Binance Smart Chain   |
 | Matic                 |
 | Optimism              |
-| NEAR                  |
+| Fantom                |
 | xDAI                  |
+| Avalanche             |
 
 [![asciicast](https://asciinema.org/a/382198.svg)](https://asciinema.org/a/382198)
 
