@@ -24,15 +24,16 @@ defmodule Slurp.Application do
   end
 
   def start_phase(:blockchains_and_subscriptions, _start_type, _phase_args) do
-    with ids <- Slurp.Blockchains.all()
-      |> Enumerati.filter([start_on_boot: true])
-      |> Enum.map(& &1.id)
-    do
+    with ids <-
+           Slurp.Blockchains.all()
+           |> Enumerati.filter(start_on_boot: true)
+           |> Enum.map(& &1.id) do
       case ids do
         [] -> :noop
         _ -> Slurp.Commander.start_blockchains([{:where, [id: ids]}])
       end
     end
+
     :ok
   end
 end

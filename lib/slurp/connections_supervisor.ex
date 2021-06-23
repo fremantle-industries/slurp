@@ -11,14 +11,32 @@ defmodule Slurp.ConnectionsSupervisor do
   @spec start_connection(blockchain_id) :: DynamicSupervisor.on_start_child()
   def start_connection(id) do
     child_spec = {Slurp.ConnectionSupervisor, [id: id]}
-    DynamicSupervisor.start_child(__MODULE__, child_spec)
+
+    case DynamicSupervisor.start_child(__MODULE__, child_spec) do
+      {:ok, _child} = ok ->
+        :telemetry.execute([:slurp, :blockchains, :start], %{}, %{id: id})
+        ok
+
+      {:error, _} = error ->
+        error
+    end
   end
 
   @spec terminate_connection(blockchain_id) :: :ok | {:error, :not_found}
   def terminate_connection(id) do
     case find_connection(id) do
-      nil -> {:error, :not_found}
-      pid -> DynamicSupervisor.terminate_child(__MODULE__, pid)
+      nil ->
+        {:error, :not_found}
+
+      pid ->
+        case DynamicSupervisor.terminate_child(__MODULE__, pid) do
+          :ok = ok ->
+            :telemetry.execute([:slurp, :blockchains, :stop], %{}, %{id: id})
+            ok
+
+          {:error, _reason} = error ->
+            error
+        end
     end
   end
 

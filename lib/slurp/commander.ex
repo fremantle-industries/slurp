@@ -59,7 +59,7 @@ defmodule Slurp.Commander do
   end
 
   def handle_call({:stop_blockchains, opts}, _from, state) do
-    {stopped, stopped_already} = Commander.StartBlockchains.stop_blockchains(opts)
+    {stopped, stopped_already} = Commander.StopBlockchains.stop_blockchains(opts)
     {:reply, {stopped, stopped_already}, state}
   end
 

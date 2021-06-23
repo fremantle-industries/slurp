@@ -1,5 +1,5 @@
 defmodule Slurp.Commander.StopBlockchains do
-  require Logger
+  alias Slurp.Blockchains
 
   @spec stop_blockchains(list) ::
           {started :: non_neg_integer, stopped_already :: non_neg_integer}

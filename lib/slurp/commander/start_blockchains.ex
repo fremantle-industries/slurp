@@ -1,4 +1,5 @@
 defmodule Slurp.Commander.StartBlockchains do
+  alias Slurp.Blockchains
   require Logger
 
   @spec start_blockchains(list) ::
