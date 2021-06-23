@@ -54,60 +54,12 @@ defmodule Slurp.Commander do
   end
 
   def handle_call({:start_blockchains, opts}, _from, state) do
-    store_id = Keyword.get(opts, :store_id, Blockchains.BlockchainStore.default_store_id())
-    filters = Keyword.get(opts, :where, [])
-
-    {started, started_already} =
-      store_id
-      |> Blockchains.all()
-      |> Enumerati.filter(filters)
-      |> Enum.map(& &1.id)
-      |> Enum.reduce(
-        {0, 0},
-        fn blockchain_id, {started, started_already} ->
-          case Slurp.ConnectionsSupervisor.start_connection(blockchain_id) do
-            {:ok, _pid} ->
-              {started + 1, started_already}
-
-            {:ok, _pid, _info} ->
-              {started + 1, started_already}
-
-            {:error, {:already_started, _pid}} ->
-              {started, started_already + 1}
-
-            els ->
-              require Logger
-              Logger.error(inspect(els))
-              {started, started_already}
-          end
-        end
-      )
-
+    {started, started_already} = Commander.StartBlockchains.start_blockchains(opts)
     {:reply, {started, started_already}, state}
   end
 
   def handle_call({:stop_blockchains, opts}, _from, state) do
-    store_id = Keyword.get(opts, :store_id, Blockchains.BlockchainStore.default_store_id())
-    filters = Keyword.get(opts, :where, [])
-
-    {stopped, stopped_already} =
-      store_id
-      |> Blockchains.all()
-      |> Enumerati.filter(filters)
-      |> Enum.map(& &1.id)
-      |> Enum.reduce(
-        {0, 0},
-        fn blockchain_id, {stopped, stopped_already} ->
-          case Slurp.ConnectionsSupervisor.terminate_connection(blockchain_id) do
-            :ok ->
-              {stopped + 1, stopped_already}
-
-            _ ->
-              {stopped, stopped_already + 1}
-          end
-        end
-      )
-
+    {stopped, stopped_already} = Commander.StartBlockchains.stop_blockchains(opts)
     {:reply, {stopped, stopped_already}, state}
   end
 
