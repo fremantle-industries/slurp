@@ -13,12 +13,16 @@ defmodule Slurp.ConnectionsSupervisor do
     child_spec = {Slurp.ConnectionSupervisor, [id: id]}
 
     case DynamicSupervisor.start_child(__MODULE__, child_spec) do
-      {:ok, _child} = ok ->
+      {:ok, _pid} = ok ->
         :telemetry.execute([:slurp, :blockchains, :start], %{}, %{id: id})
         ok
 
-      {:error, _} = error ->
-        error
+      {:ok, _pid, _info} = ok ->
+        :telemetry.execute([:slurp, :blockchains, :start], %{}, %{id: id})
+        ok
+
+      result ->
+        result
     end
   end
 
