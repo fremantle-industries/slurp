@@ -33,7 +33,9 @@ defmodule Slurp.MixProject do
     [
       {:enumerati, "~> 0.0.8"},
       {:ex_doc, "~> 0.22"},
-      {:ex_abi, "~> 0.5.4"},
+      # ex_abi ~> 0.5.5 required for decoding of output without method_id prefix
+      # https://github.com/poanetwork/ex_abi/pull/61
+      {:ex_abi, "~> 0.5.5"},
       {:exw3, "~> 0.6"},
       {:juice, "~> 0.0.3"},
       {:proper_case, "~> 1.0"},
