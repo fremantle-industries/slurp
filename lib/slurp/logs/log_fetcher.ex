@@ -100,6 +100,7 @@ defmodule Slurp.Logs.LogFetcher do
     else
       els ->
         Logger.warn("could not retrieve logs: #{inspect(els)}")
+        Blockchains.Blockchain.report_error(state.blockchain, els)
     end
 
     {:noreply, %{state | last_block_number: block_number}}

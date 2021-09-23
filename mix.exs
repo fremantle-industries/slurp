@@ -48,6 +48,7 @@ defmodule Slurp.MixProject do
       {:logger_file_backend, "~> 0.0.10", only: [:dev, :test]},
       {:dialyxir, "~> 1.0", only: :dev, runtime: false},
       {:mix_test_watch, "~> 1.0", only: :dev, runtime: false},
+      {:mock, "~> 0.3.0", only: :test},
       {:ex_unit_notifier, "~> 1.0", only: :test}
     ]
   end
