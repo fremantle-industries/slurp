@@ -27,3 +27,6 @@ slurp-*.tar
 
 # Docker
 docker
+
+# ignore logs
+/log/

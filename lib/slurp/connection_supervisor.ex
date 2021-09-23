@@ -1,6 +1,6 @@
 defmodule Slurp.ConnectionSupervisor do
   use Supervisor
-  alias Slurp.{Blockchains, NewHeads, Logs}
+  alias Slurp.{Blockchains, NewHeads, Logs, RpcAgent}
 
   @type blockchain_id :: Blockchains.Blockchain.id()
 
@@ -30,7 +30,15 @@ defmodule Slurp.ConnectionSupervisor do
       {Logs.LogFetcher, blockchain: blockchain, subscriptions: log_subscriptions}
     ]
 
+    init(children, blockchain)
+  end
+
+  defp init(children, %{rpc_strategy: nil} = _blockchain) do
     Supervisor.init(children, strategy: :one_for_one)
+  end
+
+  defp init(children, blockchain) do
+    Supervisor.init([{RpcAgent, blockchain: blockchain} | children], strategy: :one_for_one)
   end
 
   defp find_blockchain(id) do

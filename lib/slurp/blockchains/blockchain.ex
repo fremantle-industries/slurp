@@ -4,6 +4,8 @@ defmodule Slurp.Blockchains.Blockchain do
   @type id :: String.t()
   @type endpoint :: String.t()
   @type explorer_adapter :: module
+  @type rpc_strategy_adapter :: module
+  @type rpc_strategy_args :: list
   @type explorer_endpoint :: String.t()
   @type t :: %Blockchain{
           id: id,
@@ -18,7 +20,8 @@ defmodule Slurp.Blockchains.Blockchain do
           new_head_initial_history: pos_integer,
           poll_interval_ms: non_neg_integer,
           explorer: {explorer_adapter, explorer_endpoint} | nil,
-          rpc: [endpoint]
+          rpc: [endpoint],
+          rpc_strategy: {rpc_strategy_adapter, rpc_strategy_args} | nil
         }
 
   defstruct ~w[
@@ -35,14 +38,26 @@ defmodule Slurp.Blockchains.Blockchain do
     poll_interval_ms
     explorer
     rpc
+    rpc_strategy
   ]a
 
-  @spec endpoint(t) :: {:ok, endpoint} | {:error, :no_endpoints}
-  def endpoint(blockchain) do
+  @spec endpoint(t()) :: {:error, :no_endpoints} | {:ok, any}
+  def endpoint(%Blockchain{rpc_strategy: nil} = blockchain) do
     case List.first(blockchain.rpc) do
       nil -> {:error, :no_endpoints}
       endpoint -> {:ok, endpoint}
     end
+  end
+
+  def endpoint(blockchain) do
+    Slurp.RpcAgent.endpoint(blockchain)
+  end
+
+  @spec report_error(t, atom | String.t()) :: :ok
+  def report_error(%Blockchain{rpc_strategy: nil} = _blockchain, _err_msg), do: :ok
+
+  def report_error(blockchain, err_msg) do
+    Slurp.RpcAgent.report_error(blockchain, err_msg)
   end
 
   defimpl Stored.Item do

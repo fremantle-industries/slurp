@@ -32,7 +32,8 @@ if config_env() == :dev do
         explorer: {Slurp.ExplorerAdapters.Etherscan, "https://etherscan.io"},
         rpc: [
           "https://cloudflare-eth.com"
-        ]
+        ],
+        rpc_strategy: {Slurp.RpcStrategyAdapter.RoundRobin, [threshold: 5, period: 1, unit: :minute]}
       },
       "binance-smart-chain-mainnet" => %{
         start_on_boot: false,

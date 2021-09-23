@@ -105,6 +105,8 @@ defmodule Slurp.Logs.LogFetcher do
         "could not retrieve logs, reason=~s"
         |> :io_lib.format([inspect(reason)])
         |> Logger.warn()
+
+        Blockchains.Blockchain.report_error(state.blockchain, reason)
     end
 
     {:noreply, %{state | last_block_number: block_number}}
