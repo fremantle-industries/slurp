@@ -24,3 +24,6 @@ slurp-*.tar
 
 # Elixir language server
 .elixir_ls/
+
+# ignore logs
+/log/

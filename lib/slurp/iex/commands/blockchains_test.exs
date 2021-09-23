@@ -1,5 +1,5 @@
 defmodule Slurp.IEx.Commands.BlockchainsTest do
-  use ExUnit.Case
+  use ExUnit.Case, async: false
   import ExUnit.CaptureIO
   import TestSupport.Blockchains, only: [put_blockchain: 2]
 
