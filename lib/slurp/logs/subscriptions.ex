@@ -28,9 +28,10 @@ defmodule Slurp.Logs.Subscriptions do
         |> Juice.squeeze(blockchains_query)
         |> Enum.flat_map(fn {blockchain_id, blockchain} ->
           events
-          |> Enum.flat_map(fn {event_signature, handlers} ->
+          |> Enum.flat_map(fn {event_header, handlers} ->
             handlers
-            |> Enum.map(fn handler ->
+            |> Enum.flat_map(fn handler ->
+              {event_signature, addresses} = parse_event_signature(event_header)
               hashed_event_signature =
                 Slurp.Adapter.hash_event_signature(blockchain, event_signature)
 
@@ -38,15 +39,14 @@ defmodule Slurp.Logs.Subscriptions do
                 Map.merge(handler, %{
                   blockchain_id: blockchain_id,
                   event_signature: event_signature,
-                  hashed_event_signature: hashed_event_signature
+                  hashed_event_signature: hashed_event_signature,
+                  address: addresses
                 })
-
-              struct!(Logs.LogSubscription, attrs)
+              make_log_subscription(attrs)
             end)
           end)
         end)
       end)
-
     {:ok, log_subscriptions}
   end
 
@@ -76,5 +76,21 @@ defmodule Slurp.Logs.Subscriptions do
   @spec put(log_subscription, log_subscription_store_id) :: {:ok, {term, log_subscription}}
   def put(log_subscription, store_id \\ Logs.LogSubscriptionStore.default_store_id()) do
     Logs.LogSubscriptionStore.put(log_subscription, store_id)
+  end
+
+  defp parse_event_signature(signature) when is_bitstring(signature), do: parse_event_signature({signature, []})
+  defp parse_event_signature({event_header, address}), do: {event_header, address}
+
+  defp make_log_subscription(%{address: []} = attrs) do
+    make_log_subscription(%{attrs | address: nil})
+  end
+  defp make_log_subscription(%{address: [address | []]} = attrs) do
+    make_log_subscription(%{attrs | address: address})
+  end
+  defp make_log_subscription(%{address: [address | rest]} = attrs) do
+    make_log_subscription(%{attrs | address: address}) ++ make_log_subscription(%{attrs | address: rest})
+  end
+  defp make_log_subscription(attrs) do
+    [struct!(Logs.LogSubscription, attrs)]
   end
 end
