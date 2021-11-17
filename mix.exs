@@ -36,14 +36,15 @@ defmodule Slurp.MixProject do
       # ex_abi ~> 0.5.5 required for decoding of output without method_id prefix
       # https://github.com/poanetwork/ex_abi/pull/61
       {:ex_abi, "~> 0.5.5"},
-      {:exw3, "~> 0.6"},
+      # {:exw3, github: "hswick/exw3", branch: "master"},
+      {:exw3, "~> 0.6.1"},
       {:juice, "~> 0.0.3"},
       {:proper_case, "~> 1.0"},
       {:stored, "~> 0.0.7"},
       {:table_rex, "~> 3.0"},
-      {:telemetry, "~> 0.4"},
+      {:telemetry, "~> 1.0"},
       {:telemetry_metrics, "~> 0.4"},
-      {:telemetry_poller, "~> 0.4"},
+      {:telemetry_poller, "~> 1.0"},
       {:telemetry_metrics_prometheus, "~> 1.0"},
       {:logger_file_backend, "~> 0.0.10", only: [:dev, :test]},
       {:dialyxir, "~> 1.0", only: :dev, runtime: false},
