@@ -42,4 +42,9 @@ defmodule Slurp.Blockchains do
   def put(blockchain, store_id \\ Blockchains.BlockchainStore.default_store_id()) do
     Blockchains.BlockchainStore.put(blockchain, store_id)
   end
+
+  @spec endpoint(blockchain) :: {:ok, term} | {:error, :no_endpoint}
+  def endpoint(blockchain) do
+    Blockchains.Endpoint.get(blockchain)
+  end
 end

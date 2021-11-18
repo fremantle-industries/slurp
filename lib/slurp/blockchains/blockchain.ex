@@ -41,23 +41,12 @@ defmodule Slurp.Blockchains.Blockchain do
     rpc_strategy
   ]a
 
-  @spec endpoint(t()) :: {:error, :no_endpoints} | {:ok, any}
-  def endpoint(%Blockchain{rpc_strategy: nil} = blockchain) do
-    case List.first(blockchain.rpc) do
-      nil -> {:error, :no_endpoints}
-      endpoint -> {:ok, endpoint}
-    end
-  end
-
-  def endpoint(blockchain) do
-    Slurp.RpcAgent.endpoint(blockchain)
-  end
-
   @spec report_error(t, atom | String.t()) :: :ok
-  def report_error(%Blockchain{rpc_strategy: nil} = _blockchain, _err_msg), do: :ok
-
   def report_error(blockchain, err_msg) do
-    Slurp.RpcAgent.report_error(blockchain, err_msg)
+    case blockchain.rpc_strategy do
+      nil -> :ok
+      s -> Slurp.RpcAgent.report_error(blockchain, err_msg)
+    end
   end
 
   defimpl Stored.Item do

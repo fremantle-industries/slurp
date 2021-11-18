@@ -30,7 +30,7 @@ defmodule Slurp.Logs.LogFetcher do
   def start_link(blockchain: blockchain, subscriptions: subscriptions) do
     name = process_name(blockchain.id)
     topics = Enum.map(subscriptions, & &1.hashed_event_signature)
-    {:ok, endpoint} = Blockchains.Blockchain.endpoint(blockchain)
+    {:ok, endpoint} = Blockchains.endpoint(blockchain)
 
     state = %State{
       blockchain: blockchain,
