@@ -33,9 +33,13 @@ defmodule Slurp.Adapters.Evm do
     end
   end
 
+  def log_topics(log) do
+    log["topics"]
+  end
+
   @spec deserialize_log_event(log, log_subscription) :: {:ok, struct} | {:error, term}
   def deserialize_log_event(log, log_subscription) do
-    [_hashed_event_signature | indexed_topics] = log["topics"]
+    [_hashed_event_signature | indexed_topics] = log |> log_topics()
 
     log_subscription.abi
     |> Enum.reduce(

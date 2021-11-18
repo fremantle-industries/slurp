@@ -64,22 +64,22 @@ defmodule Slurp.Logs.LogFetcher do
     # TODO: Handle rate limit/forbidden
     # TODO: Handle unable to retrieve history lookback
     with {:ok, logs} <- get_logs(block_number, state) do
-      Logger.debug("retrieved #{Enum.count(logs)} logs for subscriptions")
+      "retrieved ~w logs for subscriptions"
+      |> :io_lib.format([length(logs)])
+      |> Logger.warn()
 
       logs
       |> Enum.each(fn log ->
-        {:ok, log_hashed_event_signature} =
-          Slurp.Adapter.log_hashed_event_signature(state.blockchain, log)
+        {:ok, hashed_event_sig} = Slurp.Adapter.log_hashed_event_signature(state.blockchain, log)
 
-        state.subscriptions
-        |> Map.get(log_hashed_event_signature)
-        |> case do
+        case Map.get(state.subscriptions, hashed_event_sig) do
           nil ->
-            Logger.warn(
-              "could not find subscription, log_hashed_event_signature: #{
-                log_hashed_event_signature
-              }, topics: #{inspect(state.topics)}"
-            )
+            "could not find subscription, log_hashed_event_signature=~s, topics=~s"
+            |> :io_lib.format([
+              hashed_event_sig,
+              inspect(Slurp.Adapter.log_topics(state.blockchain, log)),
+            ])
+            |> Logger.warn()
 
           subscription ->
             with {:ok, event} <-
@@ -89,17 +89,22 @@ defmodule Slurp.Logs.LogFetcher do
               apply(mod, func, args)
             else
               {:error, reason} ->
-                Logger.warn(
-                  "could not deserialize log event '#{subscription.event_signature}': #{
-                    inspect(reason)
-                  }"
-                )
+                "could not deserialize log event signature=~s, topics=~s, abi=~s, reason=~s"
+                |> :io_lib.format([
+                  subscription.event_signature,
+                  inspect(Slurp.Adapter.log_topics(state.blockchain, log)),
+                  inspect(subscription.abi),
+                  inspect(reason)
+                ])
+                |> Logger.warn()
             end
         end
       end)
     else
-      els ->
-        Logger.warn("could not retrieve logs: #{inspect(els)}")
+      {:error, reason} ->
+        "could not retrieve logs, reason=~s"
+        |> :io_lib.format([inspect(reason)])
+        |> Logger.warn()
     end
 
     {:noreply, %{state | last_block_number: block_number}}
@@ -130,7 +135,9 @@ defmodule Slurp.Logs.LogFetcher do
         state.blockchain.new_head_initial_history
       )
 
-    Logger.debug("get logs for new head from: #{from_block}, to: #{to_block}")
+    "get logs for new head from=~w, to=~w"
+    |> :io_lib.format([from_block, to_block])
+    |> Logger.debug()
 
     filter = build_filter(from_block, to_block, state)
     Slurp.Adapter.get_logs(state.blockchain, filter, state.endpoint)

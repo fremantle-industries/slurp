@@ -31,6 +31,7 @@ defmodule Slurp.Adapter do
   @callback hash_event_signature(event_signature) :: hashed_event_signature
   @callback log_hashed_event_signature(log) ::
               {:ok, hashed_event_signature} | {:error, term}
+  @callback log_topics(log) :: {:ok, [String.t]} | {:error, term}
   @callback deserialize_log_event(log, log_subscription) :: {:ok, struct} | {:error, term}
   @callback get_logs(map, endpoint) :: {:ok, list} | {:error, term}
   @callback call(address, function_signature, call_arguments, call_params, endpoint) ::
@@ -61,6 +62,10 @@ defmodule Slurp.Adapter do
 
   def log_hashed_event_signature(blockchain, log) do
     blockchain.adapter.log_hashed_event_signature(log)
+  end
+
+  def log_topics(blockchain, log) do
+    blockchain.adapter.log_topics(log)
   end
 
   def deserialize_log_event(blockchain, log, log_subscription) do
