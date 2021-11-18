@@ -19,7 +19,7 @@ if config_env() == :dev do
   config :slurp,
     blockchains: %{
       "ethereum-mainnet" => %{
-        start_on_boot: true,
+        start_on_boot: false,
         name: "Ethereum Mainnet",
         adapter: Slurp.Adapters.Evm,
         network_id: 1,
@@ -35,7 +35,7 @@ if config_env() == :dev do
         ]
       },
       "binance-smart-chain-mainnet" => %{
-        start_on_boot: true,
+        start_on_boot: false,
         name: "Binance Smart Chain Mainnet",
         adapter: Slurp.Adapters.Evm,
         network_id: 56,
@@ -48,6 +48,22 @@ if config_env() == :dev do
         explorer: {Slurp.ExplorerAdapters.BscScan, "https://bscscan.com"},
         rpc: [
           "https://bsc-dataseed1.binance.org"
+        ]
+      },
+      "avalanche-mainnet" => %{
+        start_on_boot: false,
+        name: "Avalanche Mainnet",
+        adapter: Slurp.Adapters.Evm,
+        network_id: 43114,
+        chain_id: 43114,
+        chain: "Avax",
+        testnet: false,
+        timeout: 5000,
+        new_head_initial_history: 0,
+        poll_interval_ms: 2_500,
+        explorer: {Slurp.ExplorerAdapters.Avascan, "https://avascan.info"},
+        rpc: [
+          "https://api.avax.network/ext/bc/C/rpc"
         ]
       }
     }
