@@ -18,8 +18,8 @@ defmodule Slurp.Application do
     Enum.each(blockchains, &Slurp.Blockchains.put/1)
     {:ok, new_head_subscriptions} = Slurp.NewHeads.Subscriptions.from_config(blockchains)
     Enum.each(new_head_subscriptions, &Slurp.NewHeads.Subscriptions.put/1)
-    {:ok, log_subscriptions} = Slurp.Logs.Subscriptions.from_config(blockchains)
-    Enum.each(log_subscriptions, &Slurp.Logs.Subscriptions.put/1)
+    {:ok, _log_subscriptions} = Slurp.Logs.load_subscriptions(blockchains)
+
     :ok
   end
 
