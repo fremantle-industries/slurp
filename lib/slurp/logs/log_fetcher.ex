@@ -66,7 +66,7 @@ defmodule Slurp.Logs.LogFetcher do
     with {:ok, logs} <- get_logs(block_number, state) do
       "retrieved ~w logs for subscriptions"
       |> :io_lib.format([length(logs)])
-      |> Logger.warn()
+      |> Logger.info()
 
       logs
       |> Enum.each(fn log ->
