@@ -78,6 +78,9 @@ if config_env() == :dev do
       ]
     }
 
+  # TODO: This is really needed for slurpee
+  # config :slurp, log_subscriptions_firehose: {Slurp.Logs.NullEventHandler, :handle_event, []}
+
   config :slurp,
     log_subscriptions: %{
       "*" => [
