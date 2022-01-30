@@ -78,6 +78,9 @@ if config_env() == :dev do
       ]
     }
 
+  # Log subscriptions can be configured in 2 ways:
+  # 1. explicit config map - A map containing keys of event signatures and a list decode handlers
+  # 2. mfa - A module, function, arguments tuple that returns an explicit config map from (1)
   config :slurp,
     log_subscriptions: %{
       "*" => [
@@ -85,9 +88,9 @@ if config_env() == :dev do
       ],
       "ethereum-mainnet" => %{
         # UniswapV2
-        "Swap(address,uint,uint,uint,uint,address)" => [
+        "Swap(address,uint256,uint256,uint256,uint256,address)" => [
           %{
-            enabled: false,
+            enabled: true,
             struct: Examples.UniswapV2.Events.Swap,
             handler: {Examples.EventHandler, :handle_uniswap_v2_swap, []},
             abi: [
@@ -102,22 +105,22 @@ if config_env() == :dev do
                   %{
                     "indexed" => false,
                     "name" => "amount0In",
-                    "type" => "uint"
+                    "type" => "uint256"
                   },
                   %{
                     "indexed" => false,
                     "name" => "amount1In",
-                    "type" => "uint"
+                    "type" => "uint256"
                   },
                   %{
                     "indexed" => false,
                     "name" => "amount0Out",
-                    "type" => "uint"
+                    "type" => "uint256"
                   },
                   %{
                     "indexed" => false,
                     "name" => "amount1Out",
-                    "type" => "uint"
+                    "type" => "uint256"
                   },
                   %{
                     "indexed" => true,
@@ -133,7 +136,7 @@ if config_env() == :dev do
         ],
         "Sync(uint112,uint112)" => [
           %{
-            enabled: false,
+            enabled: true,
             struct: Examples.UniswapV2.Events.Sync,
             handler: {Examples.EventHandler, :handle_uniswap_v2_sync, []},
             abi: [

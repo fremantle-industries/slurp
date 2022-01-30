@@ -54,10 +54,14 @@ config :slurp,
 `log_subscriptions` abstract a common interface for scanning events emitted
 from contracts. They are configured under the `:slurp, :log_subscriptions` key.
 
+They can be configured in 2 ways:
+1. **explicit config map** - A map containing keys of event signatures and a list decode handlers
+2. **mfa** - A module, function, arguments tuple that returns an explicit config map from (1)
+
 ```elixir
 config :slurp,
   log_subscriptions: %{
-    "*" => %{
+    "ethereum-mainnet" => %{
       # ERC20
       "Transfer(address,address,uint256)" => [
         %{
@@ -90,7 +94,10 @@ config :slurp,
           ]
         }
       ]
-    }
+    },
+    "*" => [
+      {Examples.Erc20.EventFactory, :create, [[approval_enabled: true, transfer_enabled: true]]}
+    ]
   }
 ```
 
