@@ -17,6 +17,7 @@ defmodule Slurp.ConnectionSupervisor do
   @spec process_name(blockchain_id) :: atom
   def process_name(id), do: :"#{__MODULE__}_#{id}"
 
+  @impl true
   def init(blockchain: blockchain, endpoint: endpoint) do
     log_subscriptions = Logs.Subscriptions.query(blockchain_id: blockchain.id, enabled: true)
 
