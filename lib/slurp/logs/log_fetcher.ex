@@ -93,7 +93,7 @@ defmodule Slurp.Logs.LogFetcher do
                 |> :io_lib.format([
                   subscription.event_signature,
                   inspect(Slurp.Adapter.log_topics(state.blockchain, log)),
-                  inspect(subscription.abi),
+                  inspect(subscription.event_mappings),
                   inspect(reason)
                 ])
                 |> Logger.warn()

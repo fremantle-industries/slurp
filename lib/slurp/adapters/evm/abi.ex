@@ -30,7 +30,8 @@ defmodule Slurp.Adapters.Evm.Abi do
     "#{event_name}(#{Enum.join(non_indexed_types, ",")})"
   end
 
-  def deserialize_log_into(log, struct, abi, indexed_topics) do
+  def deserialize_log_into(log, event_mapping, indexed_topics) do
+    {struct, abi} = event_mapping
     topic_event_attr_names = Abi.indexed_event_attr_names(abi)
     topic_event_types = Abi.indexed_event_types(abi)
     log_data_event_attr_names = Abi.non_indexed_event_attr_names(abi)

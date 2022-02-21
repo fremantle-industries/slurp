@@ -27,11 +27,12 @@ if config_env() == :dev do
         chain: "ETH",
         testnet: false,
         timeout: 5000,
-        new_head_initial_history: 0,
+        new_head_initial_history: 1,
         poll_interval_ms: 2_500,
         explorer: {Slurp.ExplorerAdapters.Etherscan, "https://etherscan.io"},
         rpc: [
-          "https://cloudflare-eth.com"
+          # "https://cloudflare-eth.com" # On initial get_logs() this returns logs that don't match a subscription???
+          "https://api.mycryptoapi.com/eth"
         ]
       },
       "binance-smart-chain-mainnet" => %{
@@ -43,7 +44,7 @@ if config_env() == :dev do
         chain: "BSC",
         testnet: false,
         timeout: 5000,
-        new_head_initial_history: 0,
+        new_head_initial_history: 1,
         poll_interval_ms: 1_000,
         explorer: {Slurp.ExplorerAdapters.BscScan, "https://bscscan.com"},
         rpc: [
@@ -59,7 +60,7 @@ if config_env() == :dev do
         chain: "Avax",
         testnet: false,
         timeout: 5000,
-        new_head_initial_history: 0,
+        new_head_initial_history: 1,
         poll_interval_ms: 2_500,
         explorer: {Slurp.ExplorerAdapters.Avascan, "https://avascan.info"},
         rpc: [
@@ -84,52 +85,54 @@ if config_env() == :dev do
   config :slurp,
     log_subscriptions: %{
       "*" => [
-        {Examples.Erc20.EventFactory, :create, [[approval_enabled: true, transfer_enabled: true]]}
+        {Examples.Tokens.EventFactory, :create, [[approval_enabled: true, transfer_enabled: true]]}
       ],
       "ethereum-mainnet" => %{
         # UniswapV2
         "Swap(address,uint256,uint256,uint256,uint256,address)" => [
           %{
             enabled: true,
-            struct: Examples.UniswapV2.Events.Swap,
             handler: {Examples.EventHandler, :handle_uniswap_v2_swap, []},
-            abi: [
-              %{
-                "anonymous" => false,
-                "inputs" => [
-                  %{
-                    "indexed" => true,
-                    "name" => "sender",
-                    "type" => "address"
-                  },
-                  %{
-                    "indexed" => false,
-                    "name" => "amount0In",
-                    "type" => "uint256"
-                  },
-                  %{
-                    "indexed" => false,
-                    "name" => "amount1In",
-                    "type" => "uint256"
-                  },
-                  %{
-                    "indexed" => false,
-                    "name" => "amount0Out",
-                    "type" => "uint256"
-                  },
-                  %{
-                    "indexed" => false,
-                    "name" => "amount1Out",
-                    "type" => "uint256"
-                  },
-                  %{
-                    "indexed" => true,
-                    "name" => "to",
-                    "type" => "address"
-                  }
-                ],
-                "name" => "Swap",
-                "type" => "event"
+            event_mappings: [
+              {
+                Examples.UniswapV2.Events.Swap,
+                %{
+                  "anonymous" => false,
+                  "inputs" => [
+                    %{
+                      "indexed" => true,
+                      "name" => "sender",
+                      "type" => "address"
+                    },
+                    %{
+                      "indexed" => false,
+                      "name" => "amount0In",
+                      "type" => "uint256"
+                    },
+                    %{
+                      "indexed" => false,
+                      "name" => "amount1In",
+                      "type" => "uint256"
+                    },
+                    %{
+                      "indexed" => false,
+                      "name" => "amount0Out",
+                      "type" => "uint256"
+                    },
+                    %{
+                      "indexed" => false,
+                      "name" => "amount1Out",
+                      "type" => "uint256"
+                    },
+                    %{
+                      "indexed" => true,
+                      "name" => "to",
+                      "type" => "address"
+                    }
+                  ],
+                  "name" => "Swap",
+                  "type" => "event"
+                }
               }
             ]
           }
@@ -137,25 +140,27 @@ if config_env() == :dev do
         "Sync(uint112,uint112)" => [
           %{
             enabled: true,
-            struct: Examples.UniswapV2.Events.Sync,
             handler: {Examples.EventHandler, :handle_uniswap_v2_sync, []},
-            abi: [
-              %{
-                "anonymous" => false,
-                "inputs" => [
-                  %{
-                    "indexed" => false,
-                    "name" => "reserve0",
-                    "type" => "uint112"
-                  },
-                  %{
-                    "indexed" => false,
-                    "name" => "reserve1",
-                    "type" => "uint112"
-                  }
-                ],
-                "name" => "Sync",
-                "type" => "event"
+            event_mappings: [
+              {
+                Examples.UniswapV2.Events.Sync,
+                %{
+                  "anonymous" => false,
+                  "inputs" => [
+                    %{
+                      "indexed" => false,
+                      "name" => "reserve0",
+                      "type" => "uint112"
+                    },
+                    %{
+                      "indexed" => false,
+                      "name" => "reserve1",
+                      "type" => "uint112"
+                    }
+                  ],
+                  "name" => "Sync",
+                  "type" => "event"
+                }
               }
             ]
           }

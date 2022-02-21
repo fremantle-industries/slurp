@@ -62,41 +62,42 @@ They can be configured in 2 ways:
 config :slurp,
   log_subscriptions: %{
     "ethereum-mainnet" => %{
-      # ERC20
       "Transfer(address,address,uint256)" => [
         %{
           enabled: true,
-          struct: Examples.Erc20.Events.Transfer,
           handler: {Examples.EventHandler, :handle_erc20_transfer, []},
-          abi: [
-            %{
-              "anonymous" => false,
-              "inputs" => [
-                %{
-                  "indexed" => true,
-                  "name" => "from",
-                  "type" => "address"
-                },
-                %{
-                  "indexed" => true,
-                  "name" => "to",
-                  "type" => "address"
-                },
-                %{
-                  "indexed" => false,
-                  "name" => "value",
-                  "type" => "uint256"
-                }
-              ],
-              "name" => "Transfer",
-              "type" => "event"
+          event_mappings: [
+            {
+              Examples.Tokens.Events.Transfer,
+              %{
+                "anonymous" => false,
+                "inputs" => [
+                  %{
+                    "indexed" => true,
+                    "name" => "from",
+                    "type" => "address"
+                  },
+                  %{
+                    "indexed" => true,
+                    "name" => "to",
+                    "type" => "address"
+                  },
+                  %{
+                    "indexed" => false,
+                    "name" => "value",
+                    "type" => "uint256"
+                  }
+                ],
+                "name" => "Transfer",
+                "type" => "event"
+              }
             }
           ]
         }
       ]
     },
     "*" => [
-      {Examples.Erc20.EventFactory, :create, [[approval_enabled: true, transfer_enabled: true]]}
+      {Examples.Tokens.EventFactory, :create, [[approval_enabled: true, transfer_enabled: true]]}
     ]
   }
 ```
