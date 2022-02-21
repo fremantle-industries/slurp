@@ -1,11 +1,15 @@
 defmodule Examples.EventHandler do
   require Logger
 
-  def handle_erc20_approval(blockchain, log, event) do
+  def handle_token_approval(blockchain, log, event) do
     handle_event(blockchain, log, event)
   end
 
-  def handle_erc20_transfer(blockchain, log, event) do
+  def handle_token_approval_for_all(blockchain, log, event) do
+    handle_event(blockchain, log, event)
+  end
+
+  def handle_token_transfer(blockchain, log, event) do
     handle_event(blockchain, log, event)
   end
 

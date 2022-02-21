@@ -6,9 +6,8 @@ defmodule Slurp.IEx.Commands.LogSubscriptions do
     "Event Signature",
     "Hashed Event Signature",
     "Enabled",
-    "Struct",
-    "Handler",
-    "ABI"
+    "Events",
+    "Handler"
   ]
 
   @type store_id_opt :: {:store_id, atom}
@@ -32,11 +31,17 @@ defmodule Slurp.IEx.Commands.LogSubscriptions do
         s.event_signature,
         "#{s.hashed_event_signature |> String.slice(0..18)}...",
         s.enabled,
-        s.struct,
-        s.handler,
-        Enum.count(s.abi)
+        s.event_mappings |> event_mapping_structs(),
+        s.handler
       ]
       |> Enum.map(&format_col/1)
+    end)
+  end
+
+  defp event_mapping_structs(event_mappings) do
+    event_mappings
+    |> Enum.map(fn {event, _abi} ->
+      event
     end)
   end
 

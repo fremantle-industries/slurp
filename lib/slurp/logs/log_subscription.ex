@@ -1,14 +1,19 @@
 defmodule Slurp.Logs.LogSubscription do
   alias __MODULE__
 
+  @type event_mapping :: {module, map}
+  @type config :: %{
+    enabled: boolean,
+    handler: mfa,
+    event_mappings: [event_mapping]
+  }
   @type t :: %LogSubscription{
           enabled: boolean,
           blockchain_id: Slurp.Blockchains.Blockchain.id(),
           event_signature: Slurp.Adapter.event_signature(),
           hashed_event_signature: Slurp.Adapter.hashed_event_signature(),
-          struct: module,
           handler: {module, atom, list},
-          abi: [map]
+          event_mappings: [event_mapping]
         }
 
   defstruct ~w[
@@ -16,9 +21,8 @@ defmodule Slurp.Logs.LogSubscription do
     blockchain_id
     event_signature
     hashed_event_signature
-    struct
     handler
-    abi
+    event_mappings
   ]a
 
   defimpl Stored.Item do

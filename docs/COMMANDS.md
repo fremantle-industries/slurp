@@ -70,20 +70,20 @@ List log subscriptions that can optionally be filtered and ordered
 
 ```
 iex(6)> log_subscriptions
-+-----------------------------+-------------------------------------------+------------------------+---------+---------------------------------------+------------------------------------------------------+-----+
-|               Blockchain ID |                           Event Signature | Hashed Event Signature | Enabled |                                Struct |                                              Handler | ABI |
-+-----------------------------+-------------------------------------------+------------------------+---------+---------------------------------------+------------------------------------------------------+-----+
-| binance-smart-chain-mainnet |         Approval(address,address,uint256) | 0x8c5be1e5ebec7d5bd... |   false | Elixir.Examples.Erc20.Events.Approval |  {Examples.EventHandler, :handle_erc20_approval, []} |   1 |
-| binance-smart-chain-mainnet |           Burn(address,uint,uint,address) | 0x9997fadbe0b8ea492... |   false | Elixir.Examples.UniswapV2.Events.Burn | {Examples.EventHandler, :handle_uniswap_v2_burn, []} |   1 |
-| binance-smart-chain-mainnet |                   Mint(address,uint,uint) | 0x92fc9586b1c52be04... |   false | Elixir.Examples.UniswapV2.Events.Mint | {Examples.EventHandler, :handle_uniswap_v2_mint, []} |   1 |
-| binance-smart-chain-mainnet | Swap(address,uint,uint,uint,uint,address) | 0x6d5619a2e2e254d51... |   false | Elixir.Examples.UniswapV2.Events.Swap | {Examples.EventHandler, :handle_uniswap_v2_swap, []} |   1 |
-| binance-smart-chain-mainnet |                     Sync(uint112,uint112) | 0x1c411e9a96e071241... |   false | Elixir.Examples.UniswapV2.Events.Sync | {Examples.EventHandler, :handle_uniswap_v2_sync, []} |   1 |
-| binance-smart-chain-mainnet |         Transfer(address,address,uint256) | 0xddf252ad1be2c89b6... |    true | Elixir.Examples.Erc20.Events.Transfer |  {Examples.EventHandler, :handle_erc20_transfer, []} |   1 |
-|            ethereum-mainnet |         Approval(address,address,uint256) | 0x8c5be1e5ebec7d5bd... |   false | Elixir.Examples.Erc20.Events.Approval |  {Examples.EventHandler, :handle_erc20_approval, []} |   1 |
-|            ethereum-mainnet |           Burn(address,uint,uint,address) | 0x9997fadbe0b8ea492... |   false | Elixir.Examples.UniswapV2.Events.Burn | {Examples.EventHandler, :handle_uniswap_v2_burn, []} |   1 |
-|            ethereum-mainnet |                   Mint(address,uint,uint) | 0x92fc9586b1c52be04... |   false | Elixir.Examples.UniswapV2.Events.Mint | {Examples.EventHandler, :handle_uniswap_v2_mint, []} |   1 |
-|            ethereum-mainnet | Swap(address,uint,uint,uint,uint,address) | 0x6d5619a2e2e254d51... |   false | Elixir.Examples.UniswapV2.Events.Swap | {Examples.EventHandler, :handle_uniswap_v2_swap, []} |   1 |
-|            ethereum-mainnet |                     Sync(uint112,uint112) | 0x1c411e9a96e071241... |   false | Elixir.Examples.UniswapV2.Events.Sync | {Examples.EventHandler, :handle_uniswap_v2_sync, []} |   1 |
-|            ethereum-mainnet |         Transfer(address,address,uint256) | 0xddf252ad1be2c89b6... |    true | Elixir.Examples.Erc20.Events.Transfer |  {Examples.EventHandler, :handle_erc20_transfer, []} |   1 |
-+-----------------------------+-------------------------------------------+------------------------+---------+---------------------------------------+------------------------------------------------------+-----+
++-----------------------------+-------------------------------------------+------------------------+---------+----------------------------------------+------------------------------------------------------+-----+
+|               Blockchain ID |                           Event Signature | Hashed Event Signature | Enabled |                                 Struct |                                              Handler | ABI |
++-----------------------------+-------------------------------------------+------------------------+---------+----------------------------------------+------------------------------------------------------+-----+
+| binance-smart-chain-mainnet |         Approval(address,address,uint256) | 0x8c5be1e5ebec7d5bd... |   false | Elixir.Examples.Tokens.Events.Approval |  {Examples.EventHandler, :handle_erc20_approval, []} |   1 |
+| binance-smart-chain-mainnet |           Burn(address,uint,uint,address) | 0x9997fadbe0b8ea492... |   false |  Elixir.Examples.UniswapV2.Events.Burn | {Examples.EventHandler, :handle_uniswap_v2_burn, []} |   1 |
+| binance-smart-chain-mainnet |                   Mint(address,uint,uint) | 0x92fc9586b1c52be04... |   false |  Elixir.Examples.UniswapV2.Events.Mint | {Examples.EventHandler, :handle_uniswap_v2_mint, []} |   1 |
+| binance-smart-chain-mainnet | Swap(address,uint,uint,uint,uint,address) | 0x6d5619a2e2e254d51... |   false |  Elixir.Examples.UniswapV2.Events.Swap | {Examples.EventHandler, :handle_uniswap_v2_swap, []} |   1 |
+| binance-smart-chain-mainnet |                     Sync(uint112,uint112) | 0x1c411e9a96e071241... |   false |  Elixir.Examples.UniswapV2.Events.Sync | {Examples.EventHandler, :handle_uniswap_v2_sync, []} |   1 |
+| binance-smart-chain-mainnet |         Transfer(address,address,uint256) | 0xddf252ad1be2c89b6... |    true | Elixir.Examples.Tokens.Events.Transfer |  {Examples.EventHandler, :handle_erc20_transfer, []} |   1 |
+|            ethereum-mainnet |         Approval(address,address,uint256) | 0x8c5be1e5ebec7d5bd... |   false | Elixir.Examples.Tokens.Events.Approval |  {Examples.EventHandler, :handle_erc20_approval, []} |   1 |
+|            ethereum-mainnet |           Burn(address,uint,uint,address) | 0x9997fadbe0b8ea492... |   false |  Elixir.Examples.UniswapV2.Events.Burn | {Examples.EventHandler, :handle_uniswap_v2_burn, []} |   1 |
+|            ethereum-mainnet |                   Mint(address,uint,uint) | 0x92fc9586b1c52be04... |   false |  Elixir.Examples.UniswapV2.Events.Mint | {Examples.EventHandler, :handle_uniswap_v2_mint, []} |   1 |
+|            ethereum-mainnet | Swap(address,uint,uint,uint,uint,address) | 0x6d5619a2e2e254d51... |   false |  Elixir.Examples.UniswapV2.Events.Swap | {Examples.EventHandler, :handle_uniswap_v2_swap, []} |   1 |
+|            ethereum-mainnet |                     Sync(uint112,uint112) | 0x1c411e9a96e071241... |   false |  Elixir.Examples.UniswapV2.Events.Sync | {Examples.EventHandler, :handle_uniswap_v2_sync, []} |   1 |
+|            ethereum-mainnet |         Transfer(address,address,uint256) | 0xddf252ad1be2c89b6... |    true | Elixir.Examples.Tokens.Events.Transfer |  {Examples.EventHandler, :handle_erc20_transfer, []} |   1 |
++-----------------------------+-------------------------------------------+------------------------+---------+----------------------------------------+------------------------------------------------------+-----+
 ```
